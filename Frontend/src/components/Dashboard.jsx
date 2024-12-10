@@ -334,6 +334,210 @@ const Dashboard=()=>{
 
                 </div>
 
+                <div className="cls_rec_order2">
+                <label htmlFor="" className="cls_rec_label">Wallet Transactions</label>
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+                <div className="cls_trans">
+                    <label htmlFor="" className="cls_trans_label">Commision for order:<span className="cls_trans_span">$30.00</span></label>
+                    <label className="cls_trans_label">OD-5928</label>
+                    <label className="cls_trans_label1">2 hours ago</label>
+
+                </div>
+
+
+                </div>
+
+                <div className="cls_rec_order3">
+                <label htmlFor="" className="cls_order_label">6 Orders Today</label>
+                <button className="cls_order_btn">^ 100 % compared yesterday (as of 3:58PM)</button>
+
+
+                </div>
+
+            </div>
+
+            <div className="cls_dash_container2">
+                <div className="cls_review_outline">
+                    <label htmlFor="" className="cls_rec_label">Latest Reviews</label>
+                    <div className="cls_review">
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label">Customer: tirunagari keerthi</label>
+                            <label htmlFor="" className="cls_review_label">Order: <span className="cls_review_span">#OD-5690</span></label>
+                            <label htmlFor="" className="cls_review_label">Delivery: <span className="cls_review_span">THATIPELLI SRIDHAR REDDY</span></label>
+
+                        </div>
+                        <div className="cls_review_right">
+                            <button className="cls_review_btn">5*</button>
+                            <button className="cls_review_btn">5*</button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="cls_review">
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label">Customer: tirunagari keerthi</label>
+                            <label htmlFor="" className="cls_review_label">Order: <span className="cls_review_span">#OD-5690</span></label>
+                            <label htmlFor="" className="cls_review_label">Delivery: <span className="cls_review_span">THATIPELLI SRIDHAR REDDY</span></label>
+
+                        </div>
+                        <div className="cls_review_right">
+                            <button className="cls_review_btn">5*</button>
+                            <button className="cls_review_btn">5*</button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="cls_review">
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label">Customer: tirunagari keerthi</label>
+                            <label htmlFor="" className="cls_review_label">Order: <span className="cls_review_span">#OD-5690</span></label>
+                            <label htmlFor="" className="cls_review_label">Delivery: <span className="cls_review_span">THATIPELLI SRIDHAR REDDY</span></label>
+
+                        </div>
+                        <div className="cls_review_right">
+                            <button className="cls_review_btn">5*</button>
+                            <button className="cls_review_btn">5*</button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="cls_review">
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label">Customer: tirunagari keerthi</label>
+                            <label htmlFor="" className="cls_review_label">Order: <span className="cls_review_span">#OD-5690</span></label>
+                            <label htmlFor="" className="cls_review_label">Delivery: <span className="cls_review_span">THATIPELLI SRIDHAR REDDY</span></label>
+
+                        </div>
+                        <div className="cls_review_right">
+                            <button className="cls_review_btn">5*</button>
+                            <button className="cls_review_btn">5*</button>
+
+                        </div>
+
+                    </div>
+
+                    <div className="cls_review">
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label">Customer: tirunagari keerthi</label>
+                            <label htmlFor="" className="cls_review_label">Order: <span className="cls_review_span">#OD-5690</span></label>
+                            <label htmlFor="" className="cls_review_label">Delivery: <span className="cls_review_span">THATIPELLI SRIDHAR REDDY</span></label>
+
+                        </div>
+                        <div className="cls_review_right">
+                            <button className="cls_review_btn">5*</button>
+                            <button className="cls_review_btn">5*</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div className="cls_review_outline">
+                    <label htmlFor="" className="cls_rec_label">Top Stores</label>
+                    <label htmlFor="" className="cls_rec_label1">(This Month)</label>
+                    <div className="cls_review">
+                    <div className="cls_review_right">
+                            <button className="cls_review_btn1">1</button>
+
+                        </div>
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label1">MANASA MUTTON AND CHICKEN CENTER</label>
+                            <label htmlFor="" className="cls_review_label2"><span className="cls_review_span1">$2222.00</span>revenue with 3 orders</label>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div className="cls_review">
+                    <div className="cls_review_right">
+                            <button className="cls_review_btn1">1</button>
+
+                        </div>
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label1">MANASA MUTTON AND CHICKEN CENTER</label>
+                            <label htmlFor="" className="cls_review_label2"><span className="cls_review_span1">$2222.00</span>revenue with 3 orders</label>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div className="cls_review">
+                    <div className="cls_review_right">
+                            <button className="cls_review_btn1">1</button>
+
+                        </div>
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label1">MANASA MUTTON AND CHICKEN CENTER</label>
+                            <label htmlFor="" className="cls_review_label2"><span className="cls_review_span1">$2222.00</span>revenue with 3 orders</label>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div className="cls_review">
+                    <div className="cls_review_right">
+                            <button className="cls_review_btn1">1</button>
+
+                        </div>
+                        <div className="cls_review_left">
+                            <label htmlFor="" className="cls_review_label1">MANASA MUTTON AND CHICKEN CENTER</label>
+                            <label htmlFor="" className="cls_review_label2"><span className="cls_review_span1">$2222.00</span>revenue with 3 orders</label>
+
+                        </div>
+                        
+
+                    </div>
+
+                </div>
+
+                <div className="cls_review_outline">
+                    <label htmlFor="" className="cls_rec_label">Notes</label>
+
+                    <input type="text"  className="cls_review_input" placeholder="Add a note here"/>                    
+
+                </div>
+
             </div>
 
         </div>
