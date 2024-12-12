@@ -24,7 +24,7 @@ const Dashboard=()=>{
                                         <i class="fa fa-caret-down"></i>
                                     </button>
                                     <div class="dropdown-content">
-                                    <a href="/">Link</a>
+                                    <a href="/dashboard/store_management">Store Management</a>
                                         <a href="/">Link</a>
                                         <a href="/">Link</a>
 

@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Store_Register from './components/Store_Register';
 import './App.css'
+import StoreManagement from './components/StoreManagement';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,6 +34,16 @@ function App() {
           element={
             isAuthenticated || localStorage.getItem('isAuthenticated') === 'true' ? (
               <Dashboard />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/dashboard/store_management"
+          element={
+            isAuthenticated || localStorage.getItem('isAuthenticated') === 'true' ? (
+              <StoreManagement />
             ) : (
               <Navigate to="/" />
             )
