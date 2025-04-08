@@ -151,56 +151,133 @@ export default function AddProducts() {
                 {loading ? (
                     <Spinner title="Loading..," />
                 ) : (
-                    
-                                    <div className="cls_form_outline">
-                                        <div className="cls_form_out_container">
-                                        <label htmlFor="" className="cls_form_out_label">{button ? "Add" : "Update"} Product</label>
 
-                                            <Form onSubmit={submitHandler}>
-                                                    <div className="cls_form_container">
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">Product Name : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='PRODUCTNAME' className='cls_form_div_input' value={formValues.PRODUCTNAME} onChange={changeHandler} placeholder="Enter Product name" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">Description : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='PRODUCT_DESCRIPTION' className='cls_form_div_input' value={formValues.PRODUCT_DESCRIPTION} onChange={changeHandler} placeholder="Enter Description" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">PRODUCT TYPE : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">THUMBNAIL URL : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='THUMBNAIL_URL' className='cls_form_div_input' value={formValues.THUMBNAIL_URL} onChange={changeHandler} placeholder="Enter THUMBNAIL URL " />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">IMAGE URL : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='IMAGE_URL' className='cls_form_div_input' value={formValues.IMAGE_URL} onChange={changeHandler} placeholder="Enter IMAGE URL " />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">PRODUCT STARTTIME : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='PRODUCT_STARTTIME' className='cls_form_div_input' value={formValues.PRODUCT_STARTTIME} onChange={changeHandler} placeholder="SELECT PRODUCT STARTTIME " />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">PRODUCT ENDTIME : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='PRODUCT_ENDTIME' className='cls_form_div_input' value={formValues.PRODUCT_ENDTIME} onChange={changeHandler} placeholder="SELECT PRODUCT ENDTIME " />
-                                                            </div>
-                                                        </div>
-                                                        {/* <div className="cls_form_div">
+                    <div className="cls_form_outline">
+                        <div className="cls_form_out_container">
+                            <label htmlFor="" className="cls_form_out_label">{button ? "Add" : "Update"} Product</label>
+
+                            <Form onSubmit={submitHandler}>
+                                <div className="cls_form_container">
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Store  :</label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Select
+                                                as="select"
+                                                name="STOREID"
+                                                className="cls_form_div_input"
+                                                value={selectedStore}
+                                                onChange={changeHandler}
+                                            >
+                                                <option value="">Select Store</option>
+                                                {Array.from(storesMap.entries()).map(([STOREID, STORENAME]) => (
+                                                    <option key={STOREID} value={STOREID}>
+                                                        {STORENAME}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Image : </label>
+                                        <div className="cls_form_div_right">
+                                            <div className="cls_flex cls_flex_gap_6px">
+                                                <button className="cls_btn_light">Choose From Gallery </button>
+                                                <button className="cls_btn_light">Upload Image </button>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Product Name : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Select name='PRODUCTNAME' className='cls_form_div_input' value={formValues.PRODUCTNAME} onChange={changeHandler} placeholder="Enter Product name">
+                                                <option value="">Select</option>
+                                            </Form.Select>                                                             </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Description : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='PRODUCT_DESCRIPTION' className='cls_form_div_input' value={formValues.PRODUCT_DESCRIPTION} onChange={changeHandler} placeholder="Enter Description" />
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT TYPE : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">PRICE: </label>
+                                        <div className="cls_form_div_right">
+                                        <div className="cls_flex cls_flex_gap_6px">
+                                            <div className="">
+                                            <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
+                                            </div>
+                                        <button className="cls_btn_light">Add Discounted Price </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Is Recommended? </label>
+                                        <div className="cls_form_div_right">
+                                        <label class="switch">
+                                            <input type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Is Popular? </label>
+                                        <div className="cls_form_div_right">
+                                        <label class="switch">
+                                            <input type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Is New? </label>
+                                        <div className="cls_form_div_right">
+                                        <label class="switch">
+                                            <input type="checkbox" checked />
+                                            <span class="slider round"></span>
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Veg/Non-Veg: </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Select name='PRODUCTNAME' className='cls_form_div_input' value={formValues.PRODUCTNAME} onChange={changeHandler} placeholder="Enter Product name">
+                                                <option value="">Select an option</option>
+                                            </Form.Select>                                                             </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">THUMBNAIL URL : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='THUMBNAIL_URL' className='cls_form_div_input' value={formValues.THUMBNAIL_URL} onChange={changeHandler} placeholder="Enter THUMBNAIL URL " />
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">IMAGE URL : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='IMAGE_URL' className='cls_form_div_input' value={formValues.IMAGE_URL} onChange={changeHandler} placeholder="Enter IMAGE URL " />
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT STARTTIME : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='PRODUCT_STARTTIME' className='cls_form_div_input' value={formValues.PRODUCT_STARTTIME} onChange={changeHandler} placeholder="SELECT PRODUCT STARTTIME " />
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT ENDTIME : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='PRODUCT_ENDTIME' className='cls_form_div_input' value={formValues.PRODUCT_ENDTIME} onChange={changeHandler} placeholder="SELECT PRODUCT ENDTIME " />
+                                        </div>
+                                    </div>
+                                    {/* <div className="cls_form_div">
                                                             <div className="cls_form_div_right">
                                                                 <label className="cls_form_div_label cls_form_div_left" htmlFor="PRODUCT_STARTTIME">From Date : </label>
                                                                 <DatePicker selected={new Date(formValues.PRODUCT_STARTTIME)} maxDate={new Date('2099-12-31')} onChange={(date) => setFormValues({ ...formValues, PRODUCT_STARTTIME: date })} />
@@ -210,43 +287,30 @@ export default function AddProducts() {
                                                                 <DatePicker selected={new Date(formValues.PRODUCT_ENDTIME)} minDate={new Date(formValues.PRODUCT_ENDTIME)} maxDate={new Date('2099-12-31')} onChange={(date) => setFormValues({ ...formValues, PRODUCT_ENDTIME: date })} />
                                                             </div>
                                                         </div> */}
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">TAG : </label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control type="text" name='TAG' className='cls_form_div_input' value={formValues.TAG} onChange={changeHandler} placeholder="SELECT TAG " />
-                                                            </div>
-                                                        </div>
-                                                        <div className="cls_form_div">
-                                                            <label className="cls_form_div_label cls_form_div_left">Store  :</label>
-                                                            <div className="cls_form_div_right">
-                                                                <Form.Control
-                                                                    as="select"
-                                                                    name="STOREID"
-                                                                    className="cls_form_div_input"
-                                                                    value={selectedStore}
-                                                                    onChange={changeHandler}
-                                                                >
-                                                                    <option value="">Select Store</option>
-                                                                    {Array.from(storesMap.entries()).map(([STOREID, STORENAME]) => (
-                                                                        <option key={STOREID} value={STOREID}>
-                                                                            {STORENAME}
-                                                                        </option>
-                                                                    ))}
-                                                                </Form.Control>
-                                                            </div>
-                                                        </div>
-<div className="cls_form_btn">
-<button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
-                                                    {button ? ("Save") : ("Update")}
-                                                </button>
-</div>
-
-                                                    </div>
-                                                
-                                            </Form>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">TAG : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='TAG' className='cls_form_div_input' value={formValues.TAG} onChange={changeHandler} placeholder="SELECT TAG " />
                                         </div>
                                     </div>
-                      
+
+                                    <div className="cls_flex cls_flex_gap_6px " style={{borderTop:"1px solid #ddd", paddingTop:"22px"}}>
+                                        <button className="cls_btn_light">Set Custom Item Tax</button>
+                                        <button className="cls_btn_light">Set Custom Item Commision</button>
+                                    </div>
+
+                                    <div className="cls_form_btn1">
+                                        <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
+                                            {button ? ("Save") : ("Update")}
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </Form>
+                        </div>
+                    </div>
+
                 )}
             </div>
         </>
