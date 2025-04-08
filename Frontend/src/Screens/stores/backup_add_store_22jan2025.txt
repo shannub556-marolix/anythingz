@@ -1,0 +1,376 @@
+import React, { useEffect, useState } from "react";
+import { Form, FormCheck } from 'react-bootstrap';
+import "react-datepicker/dist/react-datepicker.css";
+import { get, post, put } from '../../Components/api';
+import { useLocation } from 'react-router-dom';
+import Spinner from '../../Components/Spinner';
+
+export default function Add_store() {
+    const location = useLocation();
+    const { state } = location;
+    const [loading, setLoading] = useState(false);
+
+    const [formValues, setFormValues] = useState({
+        STOREID: '', STORENAME: '', DESCRIPTION: '', DEFAULT_RATING: '', APPROX_DELIVERYTIME: '', FULL_ADDRESS: '',
+        PINCODE: '', LANDMARK: '', STORE_LATITUDE: '', STORE_LONGITUDE: '', CERTIFICATE: '',
+        STORE_CHARGE: '', STORE_CHARGE_TAX: '', DELIVERY_TYPE: '', DELIVERY_CHARGE_TYPE: '', DELIVERY_CHARGE: '',
+        MIN_ORDER_PRICE: '', STORE_TAX_PERCENTAGE: '', COMMISSION_TYPE: '', COMMISSION_RATE: '', ZONE: '', button: 1
+
+        // STOREID: '', STORENAME: 'STORENAME1', DESCRIPTION: 'DESCRIPTION', DEFAULT_RATING: '1', APPROX_DELIVERYTIME: '1', FULL_ADDRESS: 'FULL_ADDRESS',
+        // PINCODE: '1', LANDMARK: 'LANDMARK', STORE_LATITUDE: '1', STORE_LONGITUDE: '1', CERTIFICATE: 'CERTIFICATE',
+        // STORE_CHARGE: '1', STORE_CHARGE_TAX: '1', DELIVERY_TYPE: '1', DELIVERY_CHARGE_TYPE: '1', DELIVERY_CHARGE: '1',
+        // MIN_ORDER_PRICE: '1', STORE_TAX_PERCENTAGE: '1', COMMISSION_TYPE: '1', COMMISSION_RATE: '1', ZONE: '1', button: 1
+    });
+    const { STOREID, STORENAME, DESCRIPTION, DEFAULT_RATING, APPROX_DELIVERYTIME,
+        FULL_ADDRESS, PINCODE, LANDMARK, STORE_LATITUDE, STORE_LONGITUDE,
+        CERTIFICATE, STORE_CHARGE, STORE_CHARGE_TAX, DELIVERY_TYPE, DELIVERY_CHARGE_TYPE,
+        DELIVERY_CHARGE, MIN_ORDER_PRICE, STORE_TAX_PERCENTAGE, COMMISSION_TYPE,
+        COMMISSION_RATE, ZONE, button
+    } = formValues;
+
+    const [isButtonDisabled, setButtonDisabled] = useState(false);
+    const [zones, setZones] = useState([]);
+    const getStoreDetailsbyId = async (id) => {
+        try {
+            setLoading(true);
+            const response = await post('/stores/byid', { "STOREID": id });
+            if (response.data.status === "success") {
+                setFormValues({
+                    ...formValues, STOREID: response.data.Data.STOREID, STORENAME: response.data.Data.STORENAME, DESCRIPTION: response.data.Data.DESCRIPTION, DEFAULT_RATING: response.data.Data.DEFAULT_RATING, APPROX_DELIVERYTIME: response.data.Data.APPROX_DELIVERYTIME,
+                    FULL_ADDRESS: response.data.Data.FULL_ADDRESS, PINCODE: response.data.Data.PINCODE, LANDMARK: response.data.Data.LANDMARK, STORE_LATITUDE: response.data.Data.STORE_LATITUDE, STORE_LONGITUDE: response.data.Data.STORE_LONGITUDE,
+                    CERTIFICATE: response.data.Data.CERTIFICATE, STORE_CHARGE: response.data.Data.STORE_CHARGE, STORE_CHARGE_TAX: response.data.Data.STORE_CHARGE_TAX, DELIVERY_TYPE: response.data.Data.DELIVERY_TYPE, DELIVERY_CHARGE_TYPE: response.data.Data.DELIVERY_CHARGE_TYPE,
+                    DELIVERY_CHARGE: response.data.Data.DELIVERY_CHARGE, MIN_ORDER_PRICE: response.data.Data.MIN_ORDER_PRICE, STORE_TAX_PERCENTAGE: response.data.Data.STORE_TAX_PERCENTAGE, COMMISSION_TYPE: response.data.Data.COMMISSION_TYPE,
+                    COMMISSION_RATE: response.data.Data.COMMISSION_RATE, button: 0
+                });
+                const zone = zones.find((z) => z.zonename === response.data.Data.ZONE);
+                if (zone) {
+                    setFormValues({ ...formValues, ZONE: zone.zonename });
+                }
+            } else {
+                alert('Failed to Fetch Store Details \n' + response.data);
+            }
+
+        } catch (error) {
+            alert('Error while fetching Store Details :', error.message);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    // STOREID = state.STOREID;
+    useEffect(() => {
+        if (state) {
+            getZones();
+            if (state.STOREID !== '' && state.STOREID !== null) {
+                console.log('STOREID: ' + state.STOREID);
+                getStoreDetailsbyId(state.STOREID);
+            };
+        }
+    }, [state]);
+
+    const changeHandler = (e) => {
+        const newvalue = e.target.type === "checkbox" ? e.target.checked === true ? 1 : 0
+            : e.target.name === "ZONE"
+                ? zones.find((ZONE) => ZONE.zonename === e.target.value)?.zoneid
+                : e.target.value;
+        setFormValues({ ...formValues, [e.target.name]: newvalue })
+        console.log('zonid' + ZONE);
+    }
+    const submitHandler = (e) => {
+        setButtonDisabled(true);
+        e.preventDefault();
+        saveStore();
+        setTimeout(() => {
+            setButtonDisabled(false);
+        }, 2000);
+    }
+
+
+    const getZones = async () => {
+        try {
+            setLoading(true);
+            const response = await get('/zones');
+            if (response.data.status === "success") {
+                setZones(response.data.Data);
+            } else {
+                alert('Failed to Fetch Zones \n' + response.data);
+            }
+        } catch (error) {
+            alert('Error while fetching Zones:', error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const saveStore = async () => {
+        //button 0 is update && button 1 is save
+        if (button === 1) {
+            try {
+                // const request = ;
+                const response = await post('/stores/add', {
+                    "stores": [{
+                        STORENAME: STORENAME, DESCRIPTION: DESCRIPTION, DEFAULT_RATING: DEFAULT_RATING, APPROX_DELIVERYTIME: APPROX_DELIVERYTIME,
+                        FULL_ADDRESS: FULL_ADDRESS, PINCODE: PINCODE, LANDMARK: LANDMARK, STORE_LATITUDE: STORE_LATITUDE, STORE_LONGITUDE: STORE_LONGITUDE,
+                        CERTIFICATE: CERTIFICATE, STORE_CHARGE: STORE_CHARGE, STORE_CHARGE_TAX: STORE_CHARGE_TAX, DELIVERY_TYPE: DELIVERY_TYPE, DELIVERY_CHARGE_TYPE: DELIVERY_CHARGE_TYPE,
+                        DELIVERY_CHARGE: DELIVERY_CHARGE, MIN_ORDER_PRICE: MIN_ORDER_PRICE, STORE_TAX_PERCENTAGE: STORE_TAX_PERCENTAGE, COMMISSION_TYPE: COMMISSION_TYPE,
+                        COMMISSION_RATE: COMMISSION_RATE, ZONE: ZONE
+                    }]
+                });
+                if (response.data.status === "success") {
+                    alert('Store Created successfully \n' + response.data);
+                } else {
+                    alert('Failed to Create Store \n' + response.data);
+                }
+            } catch (error) {
+                alert('Error Creating Store:', error.message);
+            }
+        }
+        else {
+            try {
+                const response = await post('/stores/update', {
+                    STOREID: "1", STORENAME: STORENAME, DESCRIPTION: DESCRIPTION, DEFAULT_RATING: DEFAULT_RATING, APPROX_DELIVERYTIME: APPROX_DELIVERYTIME,
+                    FULL_ADDRESS: FULL_ADDRESS, PINCODE: PINCODE, LANDMARK: LANDMARK, STORE_LATITUDE: STORE_LATITUDE, STORE_LONGITUDE: STORE_LONGITUDE,
+                    CERTIFICATE: CERTIFICATE, STORE_CHARGE: STORE_CHARGE, STORE_CHARGE_TAX: STORE_CHARGE_TAX, DELIVERY_TYPE: DELIVERY_TYPE, DELIVERY_CHARGE_TYPE: DELIVERY_CHARGE_TYPE,
+                    DELIVERY_CHARGE: DELIVERY_CHARGE, MIN_ORDER_PRICE: MIN_ORDER_PRICE, STORE_TAX_PERCENTAGE: STORE_TAX_PERCENTAGE, COMMISSION_TYPE: COMMISSION_TYPE,
+                    COMMISSION_RATE: COMMISSION_RATE, ZONE: ZONE
+                });
+                if (response.data.status === "success") {
+                    alert('Store Updated successfully \n' + response.data);
+                    setFormValues({ STOREID: '', button: 1 })//1 is for setting the button text to save
+                } else {
+                    alert('Failed to update store \n' + response.data);
+                }
+            } catch (error) {
+                alert('Error Updating store:', error);
+            }
+        }
+
+    };
+    return (
+        <>
+            <div>
+                {loading ? (
+                    <Spinner title="Loading..," />
+                ) : (
+                    <div className="page-content container pt-0 my-5">
+                        <div className="content-wrapper">
+                            <div className="d-flex justify-content-center">
+                                <div className="col">
+                                    <div className="card">
+                                        <label htmlFor="" className="content my-2">Store Management</label>
+                                        <div className="card-body">
+                                            <Form onSubmit={submitHandler}>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Store Name : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORENAME' className='form-control-user' value={STORENAME} onChange={changeHandler} placeholder="Enter Store name" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Description : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='DESCRIPTION' className='form-control-user' value={DESCRIPTION} onChange={changeHandler} placeholder="Enter Description" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Default Rating : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='DEFAULT_RATING' className='form-control-user' value={DEFAULT_RATING} onChange={changeHandler} placeholder="Enter Default Rating" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Approx Delivery Time : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='APPROX_DELIVERYTIME' className='form-control-user' value={APPROX_DELIVERYTIME} onChange={changeHandler} placeholder="Enter Approx Delivery Time" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Full Address : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='FULL_ADDRESS' className='form-control-user' value={FULL_ADDRESS} onChange={changeHandler} placeholder="Enter Full Address" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Pincode : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='PINCODE' className='form-control-user' value={PINCODE} onChange={changeHandler} placeholder="Enter Pincode" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Landmark : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='LANDMARK' className='form-control-user' value={LANDMARK} onChange={changeHandler} placeholder="Enter Landmark" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Latitude of the Store  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORE_LATITUDE' className='form-control-user' value={STORE_LATITUDE} onChange={changeHandler} placeholder="Enter Latitude of the Store " />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Longitude of the Store  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORE_LONGITUDE' className='form-control-user' value={STORE_LONGITUDE} onChange={changeHandler} placeholder="Enter Longitude of the Store " />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Certificate/License Code  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='CERTIFICATE' className='form-control-user' value={CERTIFICATE} onChange={changeHandler} placeholder="Enter Certificate/License Code " />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Store Charge  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORE_CHARGE' className='form-control-user' value={STORE_CHARGE} onChange={changeHandler} placeholder="Enter Store Charge (Packing/Extra) " />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Store Charge Tax  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORE_CHARGE_TAX' className='form-control-user' value={STORE_CHARGE_TAX} onChange={changeHandler} placeholder="Enter Store Charge Tax" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Delivery Charge Type  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control
+                                                                    as="select"
+                                                                    name='DELIVERY_CHARGE_TYPE'
+                                                                    className='form-control-user'
+                                                                    value={DELIVERY_CHARGE_TYPE}
+                                                                    onChange={changeHandler}
+                                                                >
+                                                                    <option value="">Select Delivery Charge Type</option>
+                                                                    <option value="Type 1">Type 1</option>
+                                                                    <option value="Type 2">Type 2</option>
+                                                                </Form.Control>
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Delivery Type  :</label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control
+                                                                    as="select"
+                                                                    name='DELIVERY_TYPE'
+                                                                    className='form-control-user'
+                                                                    value={DELIVERY_TYPE}
+                                                                    onChange={changeHandler}
+                                                                >
+                                                                    <option value="">Select Delivery Type</option>
+                                                                    <option value="Type 1">Type 1</option>
+                                                                    <option value="Type 2">Type 2</option>
+                                                                </Form.Control>
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Delivery Charge  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='DELIVERY_CHARGE' className='form-control-user' value={DELIVERY_CHARGE} onChange={changeHandler} placeholder="Enter Delivery Charge" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Minimum Order Price  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='MIN_ORDER_PRICE' className='form-control-user' value={MIN_ORDER_PRICE} onChange={changeHandler} placeholder="Enter Minimum Order Price" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Store Tax Percentage  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='STORE_TAX_PERCENTAGE' className='form-control-user' value={STORE_TAX_PERCENTAGE} onChange={changeHandler} placeholder="Enter Store Tax Percentage" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Commission Type :</label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control
+                                                                    as="select"
+                                                                    name='COMMISSION_TYPE'
+                                                                    className='form-control-user'
+                                                                    value={COMMISSION_TYPE}
+                                                                    onChange={changeHandler}
+                                                                >
+                                                                    <option value="">Select Commission Type</option>
+                                                                    <option value="Type 1">Type 1</option>
+                                                                    <option value="Type 2">Type 2</option>
+                                                                </Form.Control>
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Commission Rate  : </label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control type="text" name='COMMISSION_RATE' className='form-control-user' value={COMMISSION_RATE} onChange={changeHandler} placeholder="Enter Commission Rate" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="form-group row">
+                                                            <label className="col-sm-3 col-form-label">Zone  :</label>
+                                                            <div className="col-sm-9">
+                                                                <Form.Control
+                                                                    as="select"
+                                                                    name='ZONE'
+                                                                    className='form-control-user'
+                                                                    value={ZONE.zonename}
+                                                                    onChange={changeHandler}
+                                                                >
+                                                                    <option value="">Select ZONE</option>
+                                                                    {zones.map((ZONE) => (
+                                                                        <option key={ZONE.zoneid} value={ZONE.zonename}>
+                                                                            {ZONE.zonename}
+                                                                        </option>
+                                                                    ))}
+                                                                </Form.Control>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" className="btn btn-primary btn-user btn-block" disabled={isButtonDisabled} >
+                                                    {button ? ("Save") : ("Update")}
+                                                </button>
+                                            </Form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div >
+                    </div >
+                )}
+            </div>
+        </>
+    );
+}
+
+
+/* Fields that are requeired in this form
+ 
+1. Edit Text  - Store Name 
+2. Eidt Text  - Description
+3. Buttons  - Select Image
+4. Eidt Text  - Default Rating
+5. Eidt Text  - Approx Delivery Time
+6. Eidt Text  - Full Address
+7. Eidt Text  - Pincode
+8. Eidt Text  - Landmark
+9. Map (Google Map View based on Latitude & Longitude)
+10.Eidt Text  - Latitude of the Store 
+11.Eidt Text  - Longitude of the Store
+12.Eidt Text  - Certificate/License Code
+13.Eidt Text  - Store Charge (Packing/Extra)
+14.Eidt Text  - Store Charge Tax Percentage
+15.Drop Down  - Delivery Type 
+16.Operational Areas (Multiple Selections)
+17.Drop Down  - Delivery Charge Type
+18.Eidt Text  - Delivery Charge:
+19.Toggle Button  - Is Pure Veg?
+20.Eidt Text  - Min Order Price
+21.Eidt Text  - Store Tax Percentage
+22.Drop Down  - Commission Type *
+23.Eidt Text  - Commission Rate % *
+24.Drop Down  - Zone
+ 
+*/

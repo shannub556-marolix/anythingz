@@ -1,14 +1,41 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store,persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 
-ReactDOM.render(
-  <GoogleReCaptchaProvider
-    reCaptchaKey="6Le9RIkqAAAAAAz011imS3BfumvekvhY9DHz-gI5" // Replace with your v3 site key
-  >
-    <App />
-  </GoogleReCaptchaProvider>,
-  document.getElementById("root")
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+  // <React.StrictMode>
+  //   <Provider store={store}>
+  //   <PersistGate loading={null} persistor={persistor}>
+  //     <BrowserRouter>
+  //       <Routes>
+  //         <Route path="/*" element={<App />} />
+  //       </Routes>
+  //     </BrowserRouter>
+  //     </PersistGate>
+  //   </Provider>
+  // </React.StrictMode>
+  
+  <React.StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </React.StrictMode>
 );
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();

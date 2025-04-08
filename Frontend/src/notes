@@ -1,0 +1,14 @@
+1.if the user is logged in and if he is idle for more than 5 or 10 minutes 
+    then the app should be logged out automatically or else it should ask the user to login again
+2.<div className="dropdown-center">
+  <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Select Customer 
+  </button>
+    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" role="menu">
+    {custdata && custdata.map(item => (
+          <li key={item.ccode}>
+            <button className="dropdown-item text-start" type="button">{item.cname}</button>
+          </li>
+        ))}
+  </ul>
+</div>

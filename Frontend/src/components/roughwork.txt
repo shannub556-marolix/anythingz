@@ -1,0 +1,504 @@
+/* Navbar5.css */
+*{
+    padding: 0;
+    margin: 0;
+}
+.menu-bar{
+    background: rgb(30, 30, 150);
+    padding: 10px;
+    text-align: center;
+}
+.menu-bar ul{
+    display: inline-flex;
+    list-style: none;
+    color:#fff;
+}
+.menu-bar ul li{
+    width: 100px;
+    margin:1px;
+    padding: 1px;
+}
+.menu-bar ul li a{
+    text-decoration: none;
+    color: #fff;
+}
+/* menu header style */
+.active, .menu-bar ul li:hover{
+    background: rgb(10, 10, 100);
+    border-radius: 3px;
+}
+.sub-menu-1{
+    display: none;
+}
+.menu-bar ul li:hover .sub-menu-1{
+    display: block;
+    position: absolute;
+    background: rgb(30, 30, 150);
+    margin-top: 1px;
+    margin-left:-1px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul{
+    display: block;
+    margin: 1px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li{
+    width: 180px;
+    padding: 5px;
+    border-bottom: 1px solid #fff;
+    background: rgb(10, 10, 100);
+    /* border-radius: 0; */
+    text-align: left;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child{
+    border-bottom: none;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li a:hover
+{
+    color: #fff;
+}
+/*.fa-angle-right{
+    float: right;
+} */
+.sub-menu-2{
+    display: none;
+}
+.hover-me:hover .sub-menu-2{
+    position: absolute;
+    display: block;
+    margin-top: -27px;
+    margin-left: 180px;
+    background: rgb(0, 100, 0);
+}
+.sub-menu-3{
+    display: none;
+}
+.hover-me2:hover .sub-menu-3{
+    position: absolute;
+    display: block;
+    margin-top: -27px;
+    margin-left: 180px;
+    background: rgb(0, 100, 0);
+}
+
+/* End */
+
+
+/* styles in Navbar  */
+
+const generateDynamicStyles = () => {
+        const levels = [1, 2, 3, 4, 5];
+        const subMenu2Styles = levels.map(level => `
+      .hover-me-${level}:hover .sub-menu-${level} {
+        display: block;
+      }
+    `).join('');
+
+        const dynamicStyles = levels.map(level => `
+          .hover-me-${level}:hover .sub-menu-${level} {
+            position: absolute;
+            display: block;
+            margin-top: -27px;
+            margin-left: 140px; /* Adjust this value based on your design */
+            background: rgb(30, 30, 150);
+          }
+        `).join('');
+        return `${subMenu2Styles}
+    ${dynamicStyles}`;
+    };
+
+
+    /* End */
+
+
+
+
+    /*  Date : 25-Dec-2023 Navbar2.jsx and Navbar5.css  */
+
+    import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {IoIosArrowDown,IoIosArrowForward} from 'react-icons/io';
+import '../css/Navbar2.css';
+
+const Navbar2 = (props) => {
+    const [menuData, setMenuData] = useState([]);
+    const generateDynamicStyles = () => {
+        const levels = [1, 2, 3, 4, 5];
+
+        const dynamicStyles = levels.map(level => `
+          .hover-me-${level}:hover .sub-menu-${level} {
+            position: absolute;
+            //  display: block;
+            margin-top: -27px;
+            margin-left: 100%; 
+            background: rgb(30, 30, 150);
+          }
+          .hover-me-${level}:hover .sub-menu-${level} {
+            display: block;
+          }
+          .sub-menu-${level}{
+            display: none;
+          }
+          .sub-menu-${level+1} ul{
+            
+          }
+        `).join('');
+        return `${dynamicStyles}`;
+    };
+
+    useEffect(() => {
+        const authToken =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJzYWkiLCJpYXQiOjE2ODY3MzQzMDgsImV4cCI6MTY5MDMzNDMwOH0.x6bhhkTabNx5b7fyP7NydIIovfqFn602v-e5k-PSMvw';
+        // Fetch data from your API
+        fetch('http://192.168.236.1:8080/api/getmodules', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setMenuData(data.data);
+            })
+            .catch((error) => console.error('Error fetching data:', error));
+    }, []);
+
+    const renderMenuItem = (menuItem, level = 1) => {
+        const hasChildren = menuItem.children && menuItem.children.length > 0;
+
+        return (
+            <li key={menuItem.moduleid} className={`hover-me-${level}`}>
+                {!menuItem.navigateto ? (
+                    <span>{menuItem.modulename}
+                    <span className='arrowdown'>{hasChildren&&level==1?(<IoIosArrowDown/>):('')}</span>
+                    <span className='arrowforward'>{hasChildren&&level>1?(<IoIosArrowForward/>):('')}</span></span>
+                ) : (
+                    <a href={menuItem.navigateto}>{menuItem.modulename}</a>
+                )}
+                {hasChildren && (
+                    <div className={`sub-menu-${level}`}>
+                        <ul>
+                            {menuItem.children.map((child) => renderMenuItem(child, level + 1))}
+                        </ul>
+                    </div>
+                )}
+            </li>
+        );
+    };
+
+    return (
+        <div>
+            <style>{generateDynamicStyles()}</style>
+            <div className='menu-bar'>
+                <ul>
+                    {menuData.map((menuItem) => renderMenuItem(menuItem))}
+                </ul>
+            </div>
+        </div>
+    );
+};
+
+export default Navbar2;
+
+
+.menu-bar{
+    background: rgb(30, 30, 150);
+    /* padding: 10px; */
+    text-align: left;
+}
+/* display:flex is for aligning header items in horizontal way
+   list-style: none is to hide the anchor tags
+    color is for header text color */
+.menu-bar ul{
+    display: flex;
+    list-style:none; 
+    color:#fff;
+    /* ap01j9954 */
+}
+.menu-bar ul li{
+    padding: 10px;   
+}
+.arrowforward{
+    float: right;
+}
+.arrowdown{
+    float: right;
+    margin-left: 5px;
+    color: red;
+}
+
+.menu-bar ul li a{
+    display: flex;
+    text-decoration: none;
+    color: #fff;
+}
+.active, .menu-bar ul li:hover{
+    background: rgb(10, 10, 100);   
+}
+
+.menu-bar ul li:hover .sub-menu-1{
+    display: block;
+    position:absolute;
+    background: rgb(30, 30, 150);
+    margin-top: 8px;
+    margin-left:-10px;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul{
+    display: block;
+    padding: 0px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li{
+    /* width: 180px; */
+    /* padding: 0px;  */
+    border-bottom: 1px solid #fff;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child{
+    border-bottom: none;
+}
+/* .menu-bar ul li:hover .sub-menu-1 ul li a:hover
+{
+    color: #fff;
+} */
+
+
+
+
+/* after implementation */
+import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IoIosArrowDown, IoIosArrowForward } from 'react-icons/io';
+import '../css/Navbar2.css';
+
+const Navbar2 = (props) => {
+    const [menuData, setMenuData] = useState([]);
+    const generateDynamicStyles = () => {
+        const levels = [1, 2, 3, 4, 5];
+
+        const dynamicStyles = levels.map(level => `
+          .hover-me-${level}:hover .sub-menu-${level} {
+            display: block;
+            position: absolute;
+            top: 0;
+            left:100%;
+            background-color: black;
+          }
+          .sub-menu-${level}{
+            display: none;
+          }
+        `).join('');
+        return `${dynamicStyles}`;
+    };
+
+    useEffect(() => {
+        const authToken =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJzYWkiLCJpYXQiOjE2ODY3MzQzMDgsImV4cCI6MTY5MDMzNDMwOH0.x6bhhkTabNx5b7fyP7NydIIovfqFn602v-e5k-PSMvw';
+        // Fetch data from your API
+        fetch('http://192.168.236.1:8080/api/getmodules', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setMenuData(data.data);
+            })
+            .catch((error) => console.error('Error fetching data:', error));
+    }, []);
+
+    const renderMenuItem = (menuItem, level = 1) => {
+        const hasChildren = menuItem.children && menuItem.children.length > 0;
+
+        return (
+            <li key={menuItem.moduleid} className={`hover-me-${level}`}>
+                {!menuItem.navigateto ? (
+                    <a href="#">{menuItem.modulename}
+                        <span className='arrowdown'>{hasChildren && level == 1 ? (<IoIosArrowDown />) : ('')}</span>
+                        <span className='arrowforward'>{hasChildren && level > 1 ? (<IoIosArrowForward />) : ('')}</span></a>
+                ) : (
+                    <a href={menuItem.navigateto}>{menuItem.modulename}</a>
+                )}
+                {hasChildren && (
+                    <div className={`sub-menu-${level}`}>
+                        <ul>
+                            {menuItem.children.map((child) => renderMenuItem(child, level + 1))}
+                        </ul>
+                    </div>
+                )}
+            </li>
+        );
+    };
+
+    return (
+        <>
+            <style>{generateDynamicStyles()}</style>
+            <div className='menu-bar'>
+                <ul>
+                    {menuData.map((menuItem) => renderMenuItem(menuItem))}
+                </ul>
+            </div>
+        </>
+    );
+};
+
+export default Navbar2;
+
+
+.menu-bar {
+    background: black;
+    /* padding: 10px; */
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+}
+
+/* display:flex is for aligning header items in horizontal way
+   list-style: none is to hide the anchor tags
+    color is for header text color */
+.menu-bar ul {
+    list-style: none;
+    display: flex;
+    /* ap01j9954 */
+}
+
+.menu-bar ul li {
+    /* padding: 10px; */
+    padding: 10px;
+    position: relative;
+}
+
+
+.menu-bar ul li a{
+    color: white;
+    display: flex;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+.menu-bar ul li a:hover {
+    color: blue;
+}
+.sub-menu-1{
+    display: none;
+}
+
+.menu-bar ul li:hover .sub-menu-1 {
+    display: block;
+    position: absolute;
+    left:0;
+    top:100%;
+    background-color: black;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul {
+    display: block;
+    padding: 0px;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li {
+    /* width: 180px; */
+    /* padding: 0px;  */
+    border-bottom: 1px solid #fff;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child {
+    border-bottom: none;
+}
+
+
+.arrowforward {
+    float: right;
+}
+
+.arrowdown {
+    float: right;
+    margin-left: 5px;
+    color: white;
+}
+
+/* .menu-bar ul li:hover .sub-menu-1 ul li a:hover
+{
+    color: #fff;
+} */
+
+
+
+
+
+
+
+
+
+.menu-bar {
+    background: rgb(30, 30, 150);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+}
+
+/* display:flex is for aligning header items in horizontal way
+   list-style: none is to hide the anchor tags
+    color is for header text color */
+.menu-bar ul {
+    list-style: none;
+    display: flex;
+    /* ap01j9954 */
+}
+
+.menu-bar ul li {
+    padding: 5px;
+    position: relative;
+}
+.menu-bar ul li:hover {
+    background: rgb(10, 10, 100);
+}
+
+.menu-bar ul li a{
+    color: white;
+    display: flex;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.menu-bar ul li:hover .sub-menu-1 {
+    display: block;
+    position: absolute;
+    left:0;
+    top:100%;
+    /* background: rgb(10, 10, 100); */
+    background: rgb(30, 30, 150);
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul {
+    display: block;
+    padding: 0px;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li {
+    /* width: 180px; */
+    /* padding: 0px;  */
+    border-bottom: 1px solid #fff;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child {
+    border-bottom: none;
+}
+
+.arrowforward {
+    float:right;
+    margin-left: 5px;
+    color: white;
+}
+
+.arrowdown {
+    float: right;
+    margin-left: 5px;
+    color: white;
+}
+
+/* .menu-bar ul li:hover .sub-menu-1 ul li a:hover
+{
+    color: #fff;
+} */
