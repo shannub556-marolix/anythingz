@@ -13,6 +13,9 @@
 label{
   color: #000;
 }
+.cls_paddingTop_22px{
+  padding-top: 22px;
+}
 .cls_dash_main{
   display: flex;
   flex-direction: column;
@@ -336,6 +339,16 @@ label{
 .cls_flex_align_flex_start{
   align-items: flex-start;
 }
+.cls_btn_cancel{
+  background-color: #d82c0d;
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border: 1px solid #d82c0d;
+  border-radius: 5px;
+
+}
 .cls_live_label{
   font-size: 14px;
   font-weight: 600;
@@ -652,3 +665,18 @@ input:checked + .slider:before {
 }
 
 /* slider styles ends here */
+
+.cls_varaints_outline{
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #ddd;
+  margin-top: 12px;
+  padding-top: 22px;
+  row-gap: 22px;
+  align-items: flex-start;
+}
+.cls_varaints_container{
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+}

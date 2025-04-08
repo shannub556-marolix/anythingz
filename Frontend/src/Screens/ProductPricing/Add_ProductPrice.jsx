@@ -226,7 +226,7 @@ export default function AddProductPricing() {
                                                     <div className="cls_form_div">
                                                         <label className="cls_form_div_label cls_form_div_left">Select Store  :<span class="text-danger">*</span></label>
                                                         <div className="cls_form_div_right">
-                                                            <Form.Control
+                                                            <Form.Select
                                                                 as="select"
                                                                 name="STOREID"
                                                                 className="cls_form_div_input"
@@ -239,13 +239,19 @@ export default function AddProductPricing() {
                                                                         {STORENAME}
                                                                     </option>
                                                                 ))}
-                                                            </Form.Control>
+                                                            </Form.Select>
+                                                        </div>
+                                                    </div>
+                                                    <div className="cls_form_div">
+                                                        <label className="cls_form_div_label cls_form_div_left">Name : <span class="text-danger">*</span></label>
+                                                        <div className="cls_form_div_right">
+                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
                                                         </div>
                                                     </div>
                                                     <div className="cls_form_div">
                                                         <label className="cls_form_div_label cls_form_div_left">Select Product : <span class="text-danger">*</span></label>
                                                         <div className="cls_form_div_right">
-                                                            <Form.Control
+                                                            <Form.Select
                                                                 as="select"
                                                                 name="PRODUCTID"
                                                                 className="cls_form_div_input"
@@ -258,9 +264,31 @@ export default function AddProductPricing() {
                                                                         {PRODUCTNAME}
                                                                     </option>
                                                                 ))}
-                                                            </Form.Control>
+                                                            </Form.Select>
                                                         </div>
                                                     </div>
+                                                    <div className="cls_form_div">
+                                                        <label className="cls_form_div_label cls_form_div_left">DESCRIPTION : <span class="text-danger">*</span></label>
+                                                        <div className="cls_form_div_right">
+                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="cls_flex cls_flex_column cls_paddingTop_22px">
+                                                                <label htmlFor="" className="cls_form_out_label">Variants</label>
+                                                                <div className="cls_varaints_outline">
+                                                                    <div className="cls_varaints_container">
+                                                                        <div className="cls_flex cls_flex_gap_6px">
+                                                                            <div className="">
+                                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
+                                                                            </div>
+                                                                            <button className="cls_btn_cancel">X</button>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button className="cls_btn_light">Add Variants</button>
+                                                                </div>
+                                                    </div>
+
                                                     <div className="cls_form_div">
                                                         <label className="cls_form_div_label cls_form_div_left">PRICE : <span class="text-danger">*</span></label>
                                                         <div className="cls_form_div_right">
@@ -299,7 +327,7 @@ export default function AddProductPricing() {
                                                     </div>
 
                                                 </div>
-                                                <div className="cls_form_btn">
+                                                <div className="cls_form_btn1">
                                         <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
                                             {button ? ("Save") : ("Update")}
                                         </button>
