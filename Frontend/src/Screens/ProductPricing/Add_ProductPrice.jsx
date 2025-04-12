@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import Spinner from '../../Components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import DatePicker from "react-datepicker";
+import { AddonModel } from "../../Models/AddonModel";
 import { ProductPricingModel } from '../../Models/ProductPricingModel';
 
 
@@ -19,56 +20,134 @@ export default function AddProductPricing() {
     const [formValues, setFormValues] = useState(ProductPricingModel);
     const [button, setButton] = useState(1);
     const [selectedStore, setSelectedStore] = useState('');
-    const [selectedProduct, setSelectedProduct] = useState('');
+    const [selectedType, setselectedType] = useState('');
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [storesMap, setStoresMap] = useState(new Map());
     const [productsMap, setProductsMap] = useState(new Map());
-    const getDetailsbyId = async (id,storeid) => {
+    const [Addons, setAddons] = useState(AddonModel);
+    const [variants, setVariants] = useState([{ addonname: '' }]);
+
+    const changeHandler1 = (e, index) => {
+        const { name, value } = e.target;
+        const updatedVariants = [...variants];
+        updatedVariants[index][name] = value;
+        setVariants(updatedVariants);
+    };
+
+    const addVariant = () => {
+        setVariants([...variants, { addonname: '' }]);
+    };
+
+    const removeVariant = (indexToRemove) => {
+        const filtered = variants.filter((_, index) => index !== indexToRemove);
+        setVariants(filtered);
+    };
+
+    // const getDetailsbyId = async (id,storeid) => {
+    //     try {
+    //         setLoading(true);
+    //         const response = await post('/attribute/byid', { "productid": id,"storeid":storeid });
+    //         if (response.data.status === "success") {
+    //             const Details = response.data.Data;
+    //             // const storeid = storesMap.find((z) => z.zonename === Details.ZONE);
+    //             const updatedFormValues = { ...formValues, ...Details };
+    //             // if (zone) {
+    //             //     updatedFormValues.ZONE = zone.zonename;
+    //             // }
+    //             setselectedType(updatedFormValues.PRODUCTID);
+    //             setSelectedStore(updatedFormValues.STOREID);
+    //             setFormValues(updatedFormValues);
+    //             setButton(0);//Change Button Text to "Update"
+    //         } else {
+    //             alert('Failed to Fetch Product Price Details \n' + response.data);
+    //         }
+
+    //     } catch (error) {
+    //         alert('Error while fetching Product Price Details :', error.message);
+    //     }
+    //     finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const getDetailsbyId = async (id) => {
         try {
             setLoading(true);
-            const response = await post('/productprice/byid', { "productid": id,"storeid":storeid });
+            const response = await post('/attribute/byid', { "attributeid": id });
+    
             if (response.data.status === "success") {
-                const Details = response.data.Data;
-                // const storeid = storesMap.find((z) => z.zonename === Details.ZONE);
-                const updatedFormValues = { ...formValues, ...Details };
-                // if (zone) {
-                //     updatedFormValues.ZONE = zone.zonename;
-                // }
-                setSelectedProduct(updatedFormValues.PRODUCTID);
-                setSelectedStore(updatedFormValues.STOREID);
-                setFormValues(updatedFormValues);
-                setButton(0);//Change Button Text to "Update"
-            } else {
-                alert('Failed to Fetch Product Price Details \n' + response.data);
-            }
+                const details = response.data.Data;
 
+                const updatedFormValues = {
+                    ...formValues,
+                    Name: details.attributename || '',
+                    STOREID: details.storeid || '',
+                    PRODUCTID: details.type || ''
+                };
+    
+                setSelectedStore(updatedFormValues.STOREID);
+                setselectedType(updatedFormValues.PRODUCTID);
+                setFormValues(updatedFormValues);
+                setButton(0); // Change button text to "Update"
+            } else {
+                alert('Failed to Fetch Product Attribute Details \n' + JSON.stringify(response.data));
+            }
         } catch (error) {
-            alert('Error while fetching Product Price Details :', error.message);
-        }
-        finally {
+            alert('Error while fetching Product Attribute Details: ' + error.message);
+        } finally {
             setLoading(false);
         }
     };
+    
+
+    // useEffect(() => {
+    //     if (state) {
+    //         getStores();
+    //         console.log('ID: ' + state.ID +', STOREID: '+state.STOREID);
+    //         if (state.ID !== '' && state.ID !== null) {
+    //             getDetailsbyId(state.ID,state.STOREID);
+    //         };
+    //     }
+    // }, [state]);
+
     useEffect(() => {
         if (state) {
             getStores();
-            getProducts();
-            console.log('ID: ' + state.ID +', STOREID: '+state.STOREID);
+            console.log('ID: ' + state.ID);
             if (state.ID !== '' && state.ID !== null) {
-                getDetailsbyId(state.ID,state.STOREID);
+                getDetailsbyId(state.ID); // Only ID is needed
             };
         }
     }, [state]);
+
     const changeHandler = (e) => {
-        const newvalue = e.target.type === "checkbox" ? (e.target.checked ? 1 : 0) : e.target.value;
-        setFormValues((prevFormValues) => {
-            const updatedFormValues = { ...prevFormValues, [e.target.name]: newvalue };
-            // console.log('Updated formValues:', updatedFormValues);
-            return updatedFormValues;
-        });
-        setSelectedStore(newvalue);
-        setSelectedProduct(newvalue);
-    }
+        const { name, value, type, checked } = e.target;
+        const newValue = type === "checkbox" ? (checked ? 1 : 0) : value;
+    
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            [name]: newValue
+        }));
+    
+        // Update selectedStore or selectedType if relevant
+        if (name === "STOREID") {
+            setSelectedStore(newValue);
+        } else if (name === "PRODUCTID") {
+            setselectedType(newValue);
+        }
+    };
+    
+
+    // const changeHandler = (e) => {
+    //     const newvalue = e.target.type === "checkbox" ? (e.target.checked ? 1 : 0) : e.target.value;
+    //     setFormValues((prevFormValues) => {
+    //         const updatedFormValues = { ...prevFormValues, [e.target.name]: newvalue };
+    //         // console.log('Updated formValues:', updatedFormValues);
+    //         return updatedFormValues;
+    //     });
+    //     setSelectedStore(newvalue);
+    //     setselectedType(newvalue);
+    // }
     // const changeHandler = (e) => {
     //     const newvalue = e.target.type === "checkbox" ? (e.target.checked ? 1 : 0) : e.target.value;
     //     setFormValues({ ...formValues, [e.target.name]: newvalue });
@@ -112,72 +191,125 @@ export default function AddProductPricing() {
             setLoading(false);
         }
     }
-    const getProducts = async () => {
+
+
+    // const save = async () => {
+    //     //button 0 is update && button 1 is save
+    //     if (button === 1) {
+    //         try {
+    //             const formData = { ...formValues };
+    //             // delete formData.PRODUCTID;
+    //             delete formData.CRDATE;
+    //             // const request = ;
+    //             const response = await post('/attribute/add', {
+    //                 productprices: [formData]
+    //             });
+    //             if (response.data.status === "success") {
+    //                 alert('Product Price Saved successfully ');
+    //                 navigate('/Items');
+    //             } else {
+    //                 alert('Failed to Save Product Price \n' + JSON.stringify(response.data));
+    //             }
+    //         } catch (error) {
+    //             alert('Error Saving Product Price:', error.message);
+    //         }
+    //     }
+    //     else {
+    //         try {
+    //             const response = await post('/attribute/update', { productprices: [formValues] });
+    //             if (response.data.status === "success") {
+    //                 alert('Product Price Updated successfully ');
+    //                 setFormValues({ CATEGORYID: '', button: 1 })//1 is for setting the button text to save
+    //                 navigate('/Items');
+    //             } else {
+    //                 alert('Failed to update Product Price\n' + JSON.stringify(response.data));
+    //             }
+    //         } catch (error) {
+    //             alert('Error Updating Product Price:', error);
+    //         }
+    //     }
+
+    // };
+    // const save = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const formData = {
+    //             attributename: formValues.Name,
+    //             storeid: formValues.STOREID,
+    //             type: formValues.PRODUCTID
+    //         };
+    
+    //         const response = await post('/attribute/add', {
+    //             Attributes: [formData]
+    //         });
+    
+    //         if (response.data.status === "success") {
+    //             console.log('Attributes Saved Successfully');
+    //             navigate('/Itemattributes');
+    //         } else {
+    //             alert('Failed to Save Attributes \n' + JSON.stringify(response.data));
+    //         }
+    //     } catch (error) {
+    //         alert('Error Saving Attributes: ' + error.message);
+    //     } finally{
+    //         setLoading(false);
+    //     }
+    // };
+    
+    const save = async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const response = await get('/products');
-            if (response.data.status === "success") {
-                // console.log('STOREID: '+response.data.Data.STOREID);
-                if (response.data.Data && response.data.Data.length > 0) {
-                    response.data.Data.forEach((ProductData) => {
-                        setProductsMap((prevMap) => {
-                            const newMap = new Map(prevMap);
-                            newMap.set(ProductData.PRODUCTID, ProductData.PRODUCTNAME);
-                            return newMap;
-                        });
-                    });
+
+            console.log('variants'+variants);
+            if (button === 1) {
+                // Save (Add) logic
+                const formData = {
+                    attributename: formValues.Name,
+                    storeid: formValues.STOREID,
+                    type: formValues.PRODUCTID,
+                    Addons:variants
+                };
+    
+                const response = await post('/attribute2/add', {
+                    Attributes: [formData]
+                });
+    
+                if (response.data.status === "success") {
+                    alert('Attribute Saved Successfully');
+                    navigate('/Itemattributes');
+                } else {
+                    alert('Failed to Save Attribute\n' + JSON.stringify(response.data));
                 }
-                // setStoresMap((prevMap) => {
-                //     prevMap.set(response.data.Data.STOREID, response.data.Data.STORENAME);
-                //     return prevMap;
-                //   });
             } else {
-                alert('Failed to Fetch Products Price \n' + response.data);
+                // Update logic
+                const formData = {
+                    attributeid: state?.ID, // Use the ID passed in location state
+                    attributename: formValues.Name,
+                    storeid: formValues.STOREID,
+                    type: formValues.PRODUCTID,
+                    Addons:variants
+                };
+    
+                const response = await post('/attribute2/update', {
+                    Attributes: [formData]
+                });
+    
+                if (response.data.status === "success") {
+                    alert('Attribute Updated Successfully');
+                    navigate('/Itemattributes');
+                } else {
+                    alert('Failed to Update Attribute\n' + JSON.stringify(response.data));
+                }
             }
         } catch (error) {
-            alert('Error while fetching Products Price :', error.message);
+            alert('Error Saving/Updating Attribute: ' + error.message);
         } finally {
             setLoading(false);
         }
-    }
-
-    const save = async () => {
-        //button 0 is update && button 1 is save
-        if (button === 1) {
-            try {
-                const formData = { ...formValues };
-                // delete formData.PRODUCTID;
-                delete formData.CRDATE;
-                // const request = ;
-                const response = await post('/productprice/add', {
-                    productprices: [formData]
-                });
-                if (response.data.status === "success") {
-                    alert('Product Price Saved successfully ');
-                    navigate('/Items');
-                } else {
-                    alert('Failed to Save Product Price \n' + JSON.stringify(response.data));
-                }
-            } catch (error) {
-                alert('Error Saving Product Price:', error.message);
-            }
-        }
-        else {
-            try {
-                const response = await post('/productprice/update', { productprices: [formValues] });
-                if (response.data.status === "success") {
-                    alert('Product Price Updated successfully ');
-                    setFormValues({ CATEGORYID: '', button: 1 })//1 is for setting the button text to save
-                    navigate('/Items');
-                } else {
-                    alert('Failed to update Product Price\n' + JSON.stringify(response.data));
-                }
-            } catch (error) {
-                alert('Error Updating Product Price:', error);
-            }
-        }
-
     };
+    
+
+
     return (
         <>
             <div>
@@ -191,40 +323,9 @@ export default function AddProductPricing() {
 
                                             <Form onSubmit={submitHandler}>
                                                     <div className="cls_form_container">
-                                                        <div className="cls_form_div1">
-                                                            <div className="cls_form_map_div2 cls_map_inner">
-                                                                <label className="cls_form_div_label" htmlFor="">Start Date : <span class="text-danger">*</span></label>
-                                                                <DatePicker
-                                                                    selected={new Date(formValues.STARTDATE)}
-                                                                    minDate={new Date()}
-                                                                    maxDate={new Date(formValues.ENDDATE)}
-                                                                    onChange={(date) => {
-                                                                        if (date > new Date(formValues.ENDDATE)) {
-                                                                            alert('Start Date should not be greater than End Date');
-                                                                        } else {
-                                                                            setFormValues({ ...formValues, STARTDATE: date });
-                                                                        }
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                            <div className="cls_form_map_div2 cls_map_inner">
-                                                                <label className="cls_form_div_label" htmlFor="">End Date : <span class="text-danger">*</span></label>
-                                                                <DatePicker
-                                                                    selected={new Date(formValues.ENDDATE)}
-                                                                    minDate={new Date(formValues.STARTDATE)}
-                                                                    maxDate={new Date('2099-12-31')}
-                                                                    onChange={(date) => {
-                                                                        if (date < new Date(formValues.STARTDATE)) {
-                                                                            alert('End date should be Lesser than Start Date');
-                                                                        } else {
-                                                                            setFormValues({ ...formValues, ENDDATE: date });
-                                                                        }
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
+                                                    
                                                     <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">Select Store  :<span class="text-danger">*</span></label>
+                                                        <label className="cls_form_div_label cls_form_div_left"> <span class="text-danger">*</span> Choose Store:</label>
                                                         <div className="cls_form_div_right">
                                                             <Form.Select
                                                                 as="select"
@@ -243,89 +344,75 @@ export default function AddProductPricing() {
                                                         </div>
                                                     </div>
                                                     <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">Name : <span class="text-danger">*</span></label>
+                                                        <label className="cls_form_div_label cls_form_div_left"> <span class="text-danger">*</span> Name : </label>
                                                         <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
+                                                            <Form.Control type="text" name='Name' className='cls_form_div_input' value={formValues.Name || ''} onChange={changeHandler} placeholder="Enter SGST " />
                                                         </div>
                                                     </div>
                                                     <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">Select Product : <span class="text-danger">*</span></label>
+                                                        <label className="cls_form_div_label cls_form_div_left"> <span class="text-danger">*</span> Type : </label>
                                                         <div className="cls_form_div_right">
                                                             <Form.Select
                                                                 as="select"
                                                                 name="PRODUCTID"
                                                                 className="cls_form_div_input"
-                                                                value={selectedProduct}
+                                                                value={selectedType}
                                                                 onChange={changeHandler}
                                                             >
-                                                                <option value="">Select Product</option>
-                                                                {Array.from(productsMap.entries()).map(([PRODUCTID, PRODUCTNAME]) => (
+                                                                <option value="Select Product">Select Product</option>
+                                                                <option value="SINGLE">SINGLE</option>
+                                                                <option value="MULTIPLE">MULTIPLE</option>
+
+                                                                {/* {Array.from(productsMap.entries()).map(([PRODUCTID, PRODUCTNAME]) => (
                                                                     <option key={PRODUCTID} value={PRODUCTID}>
                                                                         {PRODUCTNAME}
                                                                     </option>
-                                                                ))}
+                                                                ))} */}
                                                             </Form.Select>
                                                         </div>
                                                     </div>
                                                     <div className="cls_form_div">
                                                         <label className="cls_form_div_label cls_form_div_left">DESCRIPTION : <span class="text-danger">*</span></label>
                                                         <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
+                                                            <Form.Control type="text" name='DESCRIPTION' className='cls_form_div_input' value={formValues.DESCRIPTION || ''} onChange={changeHandler} placeholder="Enter SGST " />
                                                         </div>
                                                     </div>
 
-                                                    <div className="cls_flex cls_flex_column cls_paddingTop_22px">
-                                                                <label htmlFor="" className="cls_form_out_label">Variants</label>
-                                                                <div className="cls_varaints_outline">
-                                                                    <div className="cls_varaints_container">
-                                                                        <div className="cls_flex cls_flex_gap_6px">
-                                                                            <div className="">
-                                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
-                                                                            </div>
-                                                                            <button className="cls_btn_cancel">X</button>
-                                                                        </div>
-                                                                    </div>
-                                                                    <button className="cls_btn_light">Add Variants</button>
-                                                                </div>
-                                                    </div>
+                                                  
 
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">PRICE : <span class="text-danger">*</span></label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='PRICE' className='cls_form_div_input' value={formValues.PRICE} onChange={changeHandler} placeholder="Enter PRICE" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">SGST % : <span class="text-danger">*</span></label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='SGST' className='cls_form_div_input' value={formValues.SGST} onChange={changeHandler} placeholder="Enter SGST " />
-                                                        </div>
-                                                    </div>
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">CGST % : <span class="text-danger">*</span></label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='CGST' className='cls_form_div_input' value={formValues.CGST} onChange={changeHandler} placeholder="Enter CGST " />
-                                                        </div>
-                                                    </div>
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">IGST % : <span class="text-danger">*</span></label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='IGST' className='cls_form_div_input' value={formValues.IGST} onChange={changeHandler} placeholder="Enter IGST " />
-                                                        </div>
-                                                    </div>
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">OTHER TAX % : </label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='OTHER_TAX' className='cls_form_div_input' value={formValues.OTHER_TAX} onChange={changeHandler} placeholder="Enter OTHER TAX " />
-                                                        </div>
-                                                    </div>
-                                                    <div className="cls_form_div">
-                                                        <label className="cls_form_div_label cls_form_div_left">OTHERS : </label>
-                                                        <div className="cls_form_div_right">
-                                                            <Form.Control type="text" name='OTHERS' className='cls_form_div_input' value={formValues.OTHERS} onChange={changeHandler} placeholder="Enter Others " />
-                                                        </div>
-                                                    </div>
+<div className="cls_flex cls_flex_column cls_paddingTop_22px">
+            <label htmlFor="" className="cls_form_out_label">Variants</label>
+            <div className="cls_varaints_outline">
+                <div className="cls_varaints_container">
+                    {variants.map((variant, index) => (
+                        <div key={index} className="cls_varaints_container_con">
+                            <div style={{ width: "44%" }}>
+                                <Form.Control
+                                    type="text"
+                                    name="addonname"
+                                    className="cls_form_div_input"
+                                    value={variant.addonname}
+                                    onChange={(e) => changeHandler1(e, index)}
+                                    placeholder="Addon Name"
+                                />
+                            </div>
+                            <button
+                                type="button"
+                                className="cls_btn_cancel"
+                                onClick={() => removeVariant(index)}
+                            >
+                                X
+                            </button>
+                        </div>
+                    ))}
+                </div>
+                <button type="button" className="cls_btn_light" onClick={addVariant}>
+                    Add Variants
+                </button>
+            </div>
+        </div>
 
+ 
                                                 </div>
                                                 <div className="cls_form_btn1">
                                         <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >

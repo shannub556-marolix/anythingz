@@ -44,7 +44,7 @@ const ProductPricing = () => {
         async function fetchDataFromAPI() {
             try {
                 setLoading(true);
-                const response = await get('/productprice');//Change this 
+                const response = await get('/attribute');//Change this 
                 setProductsData(response.data.Data);  //Change this 
                 //console.log('response.data.Data'+response.data.Data);
             } catch (error) {
@@ -99,7 +99,7 @@ const ProductPricing = () => {
     const removeItem = async (id,storeid) => {
         try {
             setButtonDisabled(true);
-            const response = await post('/productprice/delete', { "productid": id,"storeid":storeid });//Change this 
+            const response = await post('/Itemattributes/delete', { "productid": id,"storeid":storeid });//Change this 
             console.log("remove response: " + response);
             if (response.status === 200) {
                 alert(response.data.Data);
@@ -168,19 +168,19 @@ const ProductPricing = () => {
                                             product ? (
                                                 <tr key={product.PRODUCTID}>
                                                     <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRODUCTNAME}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRICEWITHTAX}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributeid}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STORENAME}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRICE}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.type}</td>
                                                     <td style={{ color: "#a38b8b" }}>
                                                         <div className="row">
                                                             <div className="col">
-                                                                <BiEdit size={32} onClick={() => UpdateItem(product.PRODUCTID,product.STOREID)} color="green"/>
+                                                                <BiEdit size={32} onClick={() => UpdateItem(product.attributeid,product.storeid)} color="green"/>
                                                             </div>
                                                             <div className="col">
-                                                                <BiTrash size={32} onClick={() => removeItem(product.PRODUCTID,product.STOREID)} color="red"/>
+                                                                <BiTrash size={32} onClick={() => removeItem(product.attributeid,product.storeid)} color="red"/>
                                                             </div>
                                                         </div>
                                                     </td>

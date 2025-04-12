@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, FormCheck } from 'react-bootstrap';
 import "react-datepicker/dist/react-datepicker.css";
 import { get, post, put } from '../../Components/api';
@@ -16,12 +16,63 @@ export default function AddProducts() {
     const location = useLocation();
     const { state } = location;
     const [loading, setLoading] = useState(false);
-
+    const [mode, setMode] = useState(true)
     const [formValues, setFormValues] = useState(Product_Model);
     const [button, setButton] = useState(1);
     const [selectedStore, setSelectedStore] = useState('');
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [storesMap, setStoresMap] = useState(new Map());
+    const [attributes, setAttributes] = useState([]);
+    const [selectedAddons, setSelectedAddons] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [addonPrices, setAddonPrices] = useState({});
+    const containerRef = useRef(null);
+    const [toggles, setToggles] = useState({
+        recommended: false,
+        popular: false,
+        isNew: false,
+      });
+      
+      const handleToggle = (key) => {
+        setToggles(prev => ({ ...prev, [key]: !prev[key] }));
+      };
+      
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (containerRef.current && !containerRef.current.contains(event.target)) {
+                setIsPopupVisible(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    const getAttributes = async (ID) => {
+        try {
+            setLoading(true);
+            const response = await post('/attribute2/bystoreid', { "storeid": ID });
+            if (response.data.status === "success") {
+                setAttributes(response.data.Data);
+                  
+            } else {
+                alert('Failed to Fetch Attributes \n' + response.data);
+            }
+        } catch (error) {
+            alert('Error while fetching Attributes:', error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const visibleAttributes = attributes.filter(attribute => 
+        selectedAddons.some(addon =>
+          attribute.addons.some(a => a.addonid === addon.addonid)
+        )
+      );
+
     const getDetailsbyId = async (id) => {
         try {
             setLoading(true);
@@ -50,26 +101,33 @@ export default function AddProducts() {
     useEffect(() => {
         if (state) {
             getStores();
+
             console.log('ID: ' + state.ID);
             if (state.ID !== '' && state.ID !== null) {
                 getDetailsbyId(state.ID);
+                setMode(false)
+                getAttributes(state.ID);
+                
             };
         }
     }, [state]);
+
     const changeHandler = (e) => {
         const newvalue = e.target.type === "checkbox" ? (e.target.checked ? 1 : 0) : e.target.value;
         setFormValues((prevFormValues) => {
             const updatedFormValues = { ...prevFormValues, [e.target.name]: newvalue };
-            // console.log('Updated formValues:', updatedFormValues);
             return updatedFormValues;
         });
-        setSelectedStore(newvalue);
+
+        if (e.target.name === 'STOREID') {
+            setSelectedStore(newvalue);
+            if (newvalue) {
+                getAttributes();
+            }
+        }
     }
-    // const changeHandler = (e) => {
-    //     const newvalue = e.target.type === "checkbox" ? (e.target.checked ? 1 : 0) : e.target.value;
-    //     setFormValues({ ...formValues, [e.target.name]: newvalue });
-    //     console.log('STOREID: ' + formValues.STOREID);
-    // }
+
+
     const submitHandler = (e) => {
         setButtonDisabled(true);
         e.preventDefault();
@@ -78,6 +136,13 @@ export default function AddProducts() {
             setButtonDisabled(false);
         }, 2000);
     }
+
+    const handlePriceChange = (addonId, value) => {
+        setAddonPrices(prev => ({
+          ...prev,
+          [addonId]: value
+        }));
+      };
 
 
     const getStores = async () => {
@@ -95,10 +160,7 @@ export default function AddProducts() {
                         });
                     });
                 }
-                // setStoresMap((prevMap) => {
-                //     prevMap.set(response.data.Data.STOREID, response.data.Data.STORENAME);
-                //     return prevMap;
-                //   });
+
             } else {
                 alert('Failed to Fetch Stores \n' + response.data);
             }
@@ -159,7 +221,7 @@ export default function AddProducts() {
                             <Form onSubmit={submitHandler}>
                                 <div className="cls_form_container">
                                     <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store  :</label>
+                                        <label className="cls_form_div_label cls_form_div_left">Item's Category :</label>
                                         <div className="cls_form_div_right">
                                             <Form.Select
                                                 as="select"
@@ -189,114 +251,79 @@ export default function AddProducts() {
                                         </div>
                                     </div>
                                     <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Product Name : </label>
+                                        <label className="cls_form_div_label cls_form_div_left">Item Name : </label>
                                         <div className="cls_form_div_right">
                                             <Form.Select name='PRODUCTNAME' className='cls_form_div_input' value={formValues.PRODUCTNAME} onChange={changeHandler} placeholder="Enter Product name">
                                                 <option value="">Select</option>
                                             </Form.Select>                                                             </div>
                                     </div>
                                     <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Description : </label>
+                                        <label className="cls_form_div_label cls_form_div_left">Item Description : </label>
                                         <div className="cls_form_div_right">
                                             <Form.Control type="text" name='PRODUCT_DESCRIPTION' className='cls_form_div_input' value={formValues.PRODUCT_DESCRIPTION} onChange={changeHandler} placeholder="Enter Description" />
                                         </div>
                                     </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT TYPE : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
-                                        </div>
-                                    </div>
+                                    {/* <div className="cls_form_div">
+                                            <label className="cls_form_div_label cls_form_div_left">PRODUCT TYPE : </label>
+                                            <div className="cls_form_div_right">
+                                                <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
+                                            </div>
+                                        </div> */}
                                     <div className="cls_form_div">
                                         <label className="cls_form_div_label cls_form_div_left">PRICE: </label>
                                         <div className="cls_form_div_right">
-                                        <div className="cls_flex cls_flex_gap_6px">
-                                            <div className="">
-                                            <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
-                                            </div>
-                                        <button className="cls_btn_light">Add Discounted Price </button>
+                                            <div className="cls_flex cls_flex_gap_6px">
+                                                <div className="">
+                                                    <Form.Control type="text" name='PRODUCT_TYPE' className='cls_form_div_input' value={formValues.PRODUCT_TYPE} onChange={changeHandler} placeholder="Enter PRODUCT TYPE " />
+                                                </div>
+                                                <button className="cls_btn_light">Add Discounted Price </button>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Is Recommended? </label>
-                                        <div className="cls_form_div_right">
-                                        <label class="switch">
-                                            <input type="checkbox" checked />
-                                            <span class="slider round"></span>
-                                        </label>
-                                        </div>
+                                    <div className="cls_flex cls_flex_gap_6px " style={{ borderTop: "1px solid #ddd", paddingTop: "22px" }}>
+                                        <button className="cls_btn_light">Set Custom Item Tax</button>
+                                       
                                     </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Is Popular? </label>
-                                        <div className="cls_form_div_right">
-                                        <label class="switch">
-                                            <input type="checkbox" checked />
-                                            <span class="slider round"></span>
-                                        </label>
-                                        </div>
+                                    <div className="cls_flex cls_flex_gap_6px " style={{ borderTop: "1px solid #ddd", paddingTop: "22px" }}>
+                                        <button className="cls_btn_light">Set Custom Item Commision</button>
                                     </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Is New? </label>
-                                        <div className="cls_form_div_right">
-                                        <label class="switch">
-                                            <input type="checkbox" checked />
-                                            <span class="slider round"></span>
-                                        </label>
-                                        </div>
-                                    </div>
+                                    <div className="cls_form_div" style={{ borderTop: "1px solid #ddd", paddingTop: "22px" }}>
+  <label className="cls_form_div_label cls_form_div_left">Is Recommended?</label>
+  <div className="cls_form_div_right">
+    <label className="switch">
+      <input type="checkbox" checked={toggles.recommended} onChange={() => handleToggle("recommended")} />
+      <span className="slider round"></span>
+    </label>
+  </div>
+</div>
+
+<div className="cls_form_div">
+  <label className="cls_form_div_label cls_form_div_left">Is Popular?</label>
+  <div className="cls_form_div_right">
+    <label className="switch">
+      <input type="checkbox" checked={toggles.popular} onChange={() => handleToggle("popular")} />
+      <span className="slider round"></span>
+    </label>
+  </div>
+</div>
+
+<div className="cls_form_div">
+  <label className="cls_form_div_label cls_form_div_left">Is New?</label>
+  <div className="cls_form_div_right">
+    <label className="switch">
+      <input type="checkbox" checked={toggles.isNew} onChange={() => handleToggle("isNew")} />
+      <span className="slider round"></span>
+    </label>
+  </div>
+</div>
+
                                     <div className="cls_form_div">
                                         <label className="cls_form_div_label cls_form_div_left">Veg/Non-Veg: </label>
                                         <div className="cls_form_div_right">
                                             <Form.Select name='PRODUCTNAME' className='cls_form_div_input' value={formValues.PRODUCTNAME} onChange={changeHandler} placeholder="Enter Product name">
                                                 <option value="">Select an option</option>
                                             </Form.Select>                                                             </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">THUMBNAIL URL : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='THUMBNAIL_URL' className='cls_form_div_input' value={formValues.THUMBNAIL_URL} onChange={changeHandler} placeholder="Enter THUMBNAIL URL " />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">IMAGE URL : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='IMAGE_URL' className='cls_form_div_input' value={formValues.IMAGE_URL} onChange={changeHandler} placeholder="Enter IMAGE URL " />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT STARTTIME : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='PRODUCT_STARTTIME' className='cls_form_div_input' value={formValues.PRODUCT_STARTTIME} onChange={changeHandler} placeholder="SELECT PRODUCT STARTTIME " />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">PRODUCT ENDTIME : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='PRODUCT_ENDTIME' className='cls_form_div_input' value={formValues.PRODUCT_ENDTIME} onChange={changeHandler} placeholder="SELECT PRODUCT ENDTIME " />
-                                        </div>
-                                    </div>
-                                    {/* <div className="cls_form_div">
-                                                            <div className="cls_form_div_right">
-                                                                <label className="cls_form_div_label cls_form_div_left" htmlFor="PRODUCT_STARTTIME">From Date : </label>
-                                                                <DatePicker selected={new Date(formValues.PRODUCT_STARTTIME)} maxDate={new Date('2099-12-31')} onChange={(date) => setFormValues({ ...formValues, PRODUCT_STARTTIME: date })} />
-                                                            </div>
-                                                            <div className="cls_form_div_right">
-                                                                <label className="cls_form_div_label cls_form_div_left" htmlFor="PRODUCT_ENDTIME">To Date : </label>
-                                                                <DatePicker selected={new Date(formValues.PRODUCT_ENDTIME)} minDate={new Date(formValues.PRODUCT_ENDTIME)} maxDate={new Date('2099-12-31')} onChange={(date) => setFormValues({ ...formValues, PRODUCT_ENDTIME: date })} />
-                                                            </div>
-                                                        </div> */}
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">TAG : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='TAG' className='cls_form_div_input' value={formValues.TAG} onChange={changeHandler} placeholder="SELECT TAG " />
-                                        </div>
-                                    </div>
-
-                                    <div className="cls_flex cls_flex_gap_6px " style={{borderTop:"1px solid #ddd", paddingTop:"22px"}}>
-                                        <button className="cls_btn_light">Set Custom Item Tax</button>
-                                        <button className="cls_btn_light">Set Custom Item Commision</button>
                                     </div>
 
                                     <div className="cls_form_btn1">
@@ -309,6 +336,256 @@ export default function AddProducts() {
 
                             </Form>
                         </div>
+
+
+                        {mode ? (
+                            true
+                        ) : (
+                            // <div className="cls_add_items_right">
+
+
+
+
+
+                            //     <div className="cls_form_out_wrapper" ref={containerRef}>
+                            //         <div
+                            //             className="cls_form_out_container1"
+                            //             onClick={() => setIsPopupVisible((prev) => !prev)}
+                            //         >
+                            //             <label htmlFor="" className="cls_form_out_label">
+                            //                 Variants and Addons
+                            //             </label>
+
+                            //             <div className="cls_form_div_input_div cls_flex cls_flex_gap_6px cls_flex_wrap">
+                            //                 {selectedAddons.map((addon, index) => (
+                            //                     <div key={index} className="cls_variants_con_btn">
+                            //                         <label htmlFor="">{addon.addonname}</label>
+                            //                         <label
+                            //                             htmlFor=""
+                            //                             onClick={(e) => {
+                            //                                 e.stopPropagation();
+                            //                                 setSelectedAddons(prev => prev.filter(a => a.addonid !== addon.addonid));
+                            //                             }}
+                            //                         >x</label>
+                            //                     </div>
+                            //                 ))}
+                            //             </div>
+                            //         </div>
+
+                            //         {isPopupVisible && (
+                            //             <div className="cls_variants_poup">
+                            //                 {attributes.map((attribute) => (
+                            //                     <div key={attribute.attributeid} className="cls_variants_container">
+                            //                         <label className="cls_variants_container_label">
+                            //                             {attribute.attributename}
+                            //                         </label>
+                            //                         <div className="cls_variants_btn_container">
+                            //                             {attribute.addons.map((addon) => (
+                            //                                 <button
+                            //                                     key={addon.addonid}
+                            //                                     className={`cls_variants_btn ${selectedAddons.some(a => a.addonid === addon.addonid) ? 'selected' : ''
+                            //                                         }`}
+                            //                                     onClick={(e) => {
+                            //                                         e.stopPropagation();
+                            //                                         setSelectedAddons(prev => {
+                            //                                             // Check if addon is already selected
+                            //                                             const isSelected = prev.some(a => a.addonid === addon.addonid);
+                            //                                             if (isSelected) {
+                            //                                                 return prev.filter(a => a.addonid !== addon.addonid);
+                            //                                             } else {
+                            //                                                 return [...prev, addon];
+                            //                                             }
+                            //                                         });
+                            //                                     }}
+                            //                                 >
+                            //                                     {addon.addonname}
+                            //                                 </button>
+                            //                             ))}
+                            //                         </div>
+                            //                     </div>
+                            //                 ))}
+                            //             </div>
+                            //         )}
+                            //     </div>
+                            //     <div className="cls_form_out_container1">
+
+                            //         <div className="cls_flex  cls_flex_gap_6px cls_flex_column">
+                            //             <label htmlFor="" className="cls_form_out_label">Fruits</label>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //         </div>
+
+                            //         <div className="cls_flex  cls_flex_gap_6px cls_flex_column">
+                            //             <label htmlFor="" className="cls_form_out_label">Fruits</label>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //             <div className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+                            //                 <label htmlFor="" className="cls_add_item_label">Price for 250g</label>
+                            //                 <input type="text" name="" id="" className="cls_form_div_input cls_width26" />
+                            //             </div>
+
+                            //         </div>
+
+
+                            //     </div>
+
+                            // </div>
+
+                            <div className="cls_add_items_right">
+  <div className="cls_form_out_wrapper" ref={containerRef}>
+    
+  <div className="cls_form_out_wrapper" ref={containerRef}>
+                                    <div
+                                        className="cls_block"
+                                        onClick={() => setIsPopupVisible((prev) => !prev)}
+                                    >
+                                        <div className="cls_form_out_container1">
+                                        <label htmlFor="" className="cls_form_out_label">
+                                            Variants and Addons
+                                        </label>
+
+                                        <div className="cls_form_div_input_div cls_flex cls_flex_gap_6px cls_flex_wrap">
+                                            {selectedAddons.map((addon, index) => (
+                                                <div key={index} className="cls_variants_con_btn">
+                                                    <label htmlFor="">{addon.addonname}</label>
+                                                    <label
+                                                        htmlFor=""
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedAddons(prev => prev.filter(a => a.addonid !== addon.addonid));
+                                                        }}
+                                                    >x</label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    {isPopupVisible && (
+                                        <div className="cls_variants_poup">
+                                            {attributes.map((attribute) => (
+                                                <div key={attribute.attributeid} className="cls_variants_container">
+                                                    <label className="cls_variants_container_label">
+                                                        {attribute.attributename}
+                                                    </label>
+                                                    <div className="cls_variants_btn_container">
+                                                        {attribute.addons.map((addon) => (
+                                                            <button
+                                                                key={addon.addonid}
+                                                                className={`cls_variants_btn ${selectedAddons.some(a => a.addonid === addon.addonid) ? 'selected' : ''
+                                                                    }`}
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setSelectedAddons(prev => {
+                                                                        // Check if addon is already selected
+                                                                        const isSelected = prev.some(a => a.addonid === addon.addonid);
+                                                                        if (isSelected) {
+                                                                            return prev.filter(a => a.addonid !== addon.addonid);
+                                                                        } else {
+                                                                            return [...prev, addon];
+                                                                        }
+                                                                    });
+                                                                }}
+                                                            >
+                                                                {addon.addonname}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+    
+  </div>
+
+
+
+  {/* <div className="cls_form_out_container1">
+    {attributes.map(attribute => {
+      const attributeAddons = selectedAddons.filter(addon => 
+        attribute.addons.some(a => a.addonid === addon.addonid)
+      );
+
+      if (attributeAddons.length === 0) return null;
+
+      return (
+        <div key={attribute.attributeid} className="cls_flex cls_flex_gap_6px cls_flex_column">
+          <label htmlFor="" className="cls_form_out_label">{attribute.attributename}</label>
+          
+          {attributeAddons.map(addon => (
+            <div key={addon.addonid} className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+              <label htmlFor="" className="cls_add_item_label">Price for {addon.addonname}</label>
+              <input 
+                type="text" 
+                value={addonPrices[addon.addonid] || ''}
+                onChange={(e) => handlePriceChange(addon.addonid, e.target.value)}
+                className="cls_form_div_input cls_width26" 
+              />
+            </div>
+          ))}
+        </div>
+      );
+    })}
+  </div> */}
+  
+  {visibleAttributes.length > 0 && (
+  <div className="cls_form_out_container1">
+    {visibleAttributes.map(attribute => {
+      const attributeAddons = selectedAddons.filter(addon =>
+        attribute.addons.some(a => a.addonid === addon.addonid)
+      );
+
+      return (
+        <div key={attribute.attributeid} className="cls_flex cls_flex_gap_6px cls_flex_column">
+          <label className="cls_form_out_label">{attribute.attributename}</label>
+          
+          {attributeAddons.map(addon => (
+            <div key={addon.addonid} className="cls_flex cls_flex_justify_spacebet cls_flex_align_center cls_flex_gap_6px">
+              <label className="cls_add_item_label">Price for {addon.addonname}</label>
+              <input 
+                type="text" 
+                value={addonPrices[addon.addonid] || ''}
+                onChange={(e) => handlePriceChange(addon.addonid, e.target.value)}
+                className="cls_form_div_input cls_width26" 
+              />
+            </div>
+          ))}
+        </div>
+      );
+    })}
+  </div>
+)}
+
+
+</div>
+
+                            
+
+                        )}
                     </div>
 
                 )}
