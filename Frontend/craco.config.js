@@ -1,13 +1,26 @@
 module.exports = {
     style: {
-      css: {
-        loaderOptions: {
-          modules: {
-            auto: true, // Enable CSS Modules for all CSS files
-            localIdentName: '[hash:base64:8]' // Hash-style class names (like _abc123xy)
-          }
-        }
+      modules: {
+        localIdentName: '[hash:base64:10]' // 10-character hashed class names
+      },
+      postcss: {
+        plugins: [
+          require('tailwindcss'),
+          require('autoprefixer'),
+          require('cssnano')({
+            preset: ['default', { // Use 'default' instead of 'advanced'
+              discardComments: { removeAll: true },
+              normalizeWhitespace: true,
+              cssDeclarationSorter: true
+            }]
+          })
+        ]
+      }
+    },
+    webpack: {
+      configure: (webpackConfig) => {
+        webpackConfig.devtool = false; // Disable source maps
+        return webpackConfig;
       }
     }
   };
-  

@@ -170,8 +170,10 @@ const ProductPricing = () => {
                                                     <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributeid}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td>
+                                                    {/* <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td> */}
+                                                            <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STARTDATE}</td>
+                                                            <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.ENDDATE}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.type}</td>
                                                     <td style={{ color: "#a38b8b" }}>

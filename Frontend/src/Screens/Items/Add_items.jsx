@@ -171,33 +171,87 @@ export default function AddProducts() {
     //     }
     // };
    
+    // const getDetailsbyId = async (id) => {
+    //     try {
+    //         setLoading(true);
+    //         const response = await post('/products/byid', { "productid": id });
+    //         if (response.data.status === "success") {
+    //             const Details = response.data.Data[0];
+    //             console.log("Details"+Details.STOREID)
+    //             const updatedFormValues = { ...formValues, ...Details };
+    //             setImageUrl(Details.IMAGE_URL);
+                
+    //             // Update toggle states based on fetched data
+    //             setToggles({
+    //                 recommended: Details.IS_RECOMMENDED === 1,
+    //                 popular: Details.IS_POPULAR === 1,
+    //                 isNew: Details.IS_NEW === 1
+    //             });
+    
+    //             setSelectedStore(updatedFormValues.STOREID);
+    //             console.log("updatedFormValues : "+updatedFormValues.STOREID);
+    //             setFormValues(updatedFormValues);
+    //             getAttributes(updatedFormValues.STOREID)
+    //             setButton(0);
+    //         } else {
+    //             alert('Failed to Fetch Product Details \n' + response.data);
+    //         }
+    //     } catch (error) {
+    //         alert('Error while fetching Product Details :', error.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const getDetailsbyId = async (id) => {
         try {
             setLoading(true);
             const response = await post('/products/byid', { "productid": id });
             if (response.data.status === "success") {
-                const Details = response.data.Data;
-                console.log("Details"+Details)
-                const updatedFormValues = { ...formValues, ...Details };
-                setImageUrl(Details.IMAGE_URL);
+                const Details = response.data.Data[0];
                 
-                // Update toggle states based on fetched data
+                // Update toggle states
                 setToggles({
                     recommended: Details.IS_RECOMMENDED === 1,
                     popular: Details.IS_POPULAR === 1,
                     isNew: Details.IS_NEW === 1
                 });
     
+                // Set main product data
+                const updatedFormValues = { ...formValues, ...Details };
                 setSelectedStore(updatedFormValues.STOREID);
-                console.log("updatedFormValues : "+updatedFormValues.STOREID);
                 setFormValues(updatedFormValues);
-                getAttributes(updatedFormValues.STOREID)
-                setButton(0);
-            } else {
-                alert('Failed to Fetch Product Details \n' + response.data);
+                setImageUrl(Details.IMAGE_URL);
+    
+                // Handle addons and prices
+                if (Details.attributes && Array.isArray(Details.attributes)) {
+                    const allAddons = Details.attributes.flatMap(attr => 
+                        attr.addons.map(addon => ({
+                            addonid: addon.addonid,
+                            addonname: addon.addonname,
+                            price: addon.price
+                        }))
+                    );
+                    
+                    // Set selected addons
+                    setSelectedAddons(allAddons.map(a => ({
+                        addonid: a.addonid,
+                        addonname: a.addonname
+                    })));
+    
+                    // Set addon prices
+                    const initialPrices = {};
+                    allAddons.forEach(a => {
+                        initialPrices[a.addonid] = a.price.toString();
+                    });
+                    setAddonPrices(initialPrices);
+                }
+    
+                setButton(0); // Set to update mode
+                getAttributes(updatedFormValues.STOREID); // Load available attributes
             }
         } catch (error) {
-            alert('Error while fetching Product Details :', error.message);
+            alert('Error fetching product details: ' + error.message);
         } finally {
             setLoading(false);
         }
@@ -285,9 +339,14 @@ export default function AddProducts() {
         }
     
         // Prepare addons payload
+        // const addonsPayload = selectedAddons.map(addon => ({
+        //     ADDONID: addon.addonid,
+        //     PRICE: addonPrices[addon.addonid] || "0" // Default to 0 if price not set
+        // }));
+
         const addonsPayload = selectedAddons.map(addon => ({
             ADDONID: addon.addonid,
-            PRICE: addonPrices[addon.addonid] || "0" // Default to 0 if price not set
+            PRICE: parseFloat(addonPrices[addon.addonid]) || 0
         }));
     
         const payload = {

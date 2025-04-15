@@ -44,12 +44,12 @@
     "sessionstorage": "^0.1.0",
     "web-vitals": "^2.1.4"
   },
-"scripts": {
-  "start": "craco start",
-  "build": "craco build",
-  "test": "craco test",
-  "eject": "react-scripts eject"
-},
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -71,6 +71,11 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "@iconify/react": "^4.1.1",
-    "javascript-obfuscator": "^4.1.1"
+    "cross-env": "^7.0.3",
+    "cssnano": "^7.0.6",
+    "javascript-obfuscator": "^4.1.1",
+    "postcss-import": "^16.1.0",
+    "postcss-modules": "^6.0.1",
+    "postcss-url": "^10.1.3"
   }
 }
