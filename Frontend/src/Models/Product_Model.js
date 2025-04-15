@@ -8,5 +8,16 @@ export const Product_Model = {
     PRODUCT_STARTTIME:'',
     PRODUCT_ENDTIME:'',
     TAG:'',
-    STOREID:''
-  }
+    STOREID:'',
+    product_attribute_id:'',
+    CATEGORY:'',
+    PRICE:'',
+    DISCOUNTED_PRICE:'',
+    IS_RECOMMENDED:'',
+    IS_POPULAR:'',
+    IS_NEW:'',
+    VEG_NONVEG:'',
+    TAX_RATE:'',
+    COMMISSION_RATE:'',
+    IS_ACTIVE:''
+    }

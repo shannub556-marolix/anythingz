@@ -154,12 +154,12 @@ const Items = () => {
                                     <thead className='thead'>
                                         <tr>
                                             <th style={{ width: "10%", color: "#FFF" }}>Image</th>
-                                            <th style={{ width: "25%", color: "#FFF" }}>Product Name</th>
-                                            <th style={{ width: "15%", color: "#FFF" }}>PRODUCT DESCRIPTION</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>TAG</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>IMAGE_URL</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>Store</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>Price</th>
+                                            <th style={{ width: "25%", color: "#FFF" }}>Name</th>
+                                            <th style={{ width: "15%", color: "#FFF" }}>Item Store</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>Item Category</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>	Price</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>Attributes</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>	Last Updated At</th>
                                             <th style={{ width: "10%", color: "#FFF" }}>Actions</th>
                                         </tr>
                                     </thead>
@@ -167,13 +167,14 @@ const Items = () => {
                                         {currentRecords.map((product) => (
                                             product ? (
                                                 <tr key={product.PRODUCTID}>
-                                                    <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td>
+                                                    <td><img src={product.IMAGE_URL} alt="" className='cls_table_img' /></td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRODUCTNAME}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRODUCT_DESCRIPTION}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.TAG}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.IMAGE_URL}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STOREID}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}></td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.CATEGORY}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRICE}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.TAG}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.TAG}</td>
+
                                                     <td style={{ color: "#a38b8b" }}>
                                                         <div className="row">
                                                             <div className="col">

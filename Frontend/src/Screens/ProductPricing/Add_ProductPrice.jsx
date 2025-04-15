@@ -383,9 +383,9 @@ export default function AddProductPricing() {
 <div className="cls_flex cls_flex_column cls_paddingTop_22px">
             <label htmlFor="" className="cls_form_out_label">Variants</label>
             <div className="cls_varaints_outline">
-                <div className="cls_varaints_container">
+                <div className="cls_variants_container">
                     {variants.map((variant, index) => (
-                        <div key={index} className="cls_varaints_container_con">
+                        <div key={index} className="cls_variants_container_con">
                             <div style={{ width: "44%" }}>
                                 <Form.Control
                                     type="text"

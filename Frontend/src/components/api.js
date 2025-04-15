@@ -54,6 +54,36 @@ api.interceptors.response.use(
     // alert('Request Body: \n'+JSON.stringify(data));
     return api.post(url, data);
   };
+
+//   export const postImage = async (url, formData, auth = false) => {
+//     const headers = {
+//         ...(auth && { Authorization: `Bearer ${localStorage.getItem('token')}` }),
+//     };
+    
+//     return axios.post(url, formData, { 
+//         headers,
+//         // Let browser set content-type with boundary
+//         headers: {
+//             ...headers,
+//             'Content-Type': 'multipart/form-data',
+//         }
+//     });
+// };
+
+export const postImage = async (url, formData, auth = false) => {
+  const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
+  const headers = {
+      ...(auth && { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }),
+  };
+  
+  return api.post(fullUrl, formData, { 
+      headers: {
+          ...headers,
+          'Content-Type': 'multipart/form-data',
+      }
+  });
+};
+
   export const remove = (url, data) => {
     console.log("Request URL: "+API_URL+url);
     console.log("Request Body: "+JSON.stringify(data));

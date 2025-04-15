@@ -712,7 +712,7 @@ input:checked + .slider:before {
   row-gap: 6px;
   width: 100%;
 }
-.cls_varaints_container_con{
+.cls_variants_container_con{
   display: flex;
   column-gap: 10px;
 }
@@ -816,4 +816,8 @@ input:checked + .slider:before {
 }
 .cls_block{
   display: block;
+}
+.cls_table_img{
+  width: 45px;
+  object-fit: cover;
 }
