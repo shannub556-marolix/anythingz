@@ -124,10 +124,10 @@ const Items = () => {
                     <div className="cls_dash_main">
                         <div className="cls_store_container">
                             <div className="cls_store_left">
-                                <label htmlFor="" className="cls_store_label">Manage Products</label>
+                                <label htmlFor="" className="cls_store_label">Items Management</label>
                             </div>
                             <div className="cls_store_right">
-                                <button className="cls_store_btn" onClick={() => { handleItemClick() }}>Add Product</button>
+                                <button className="cls_store_btn" onClick={() => { handleItemClick() }}>Add New Item</button>
                                 <button className="cls_store_btn" onClick={() => { handleResetClick() }}>Reset All Filters</button>
 
                             </div>
@@ -172,8 +172,10 @@ const Items = () => {
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STOREID}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.CATEGORY}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRICE}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.TAG}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.TAG}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}><button className='cls_store_btn'>New</button></td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>
+                                                        {new Date().toISOString().split("T")[0]}
+                                                    </td>
 
                                                     <td style={{ color: "#a38b8b" }}>
                                                         <div className="row">

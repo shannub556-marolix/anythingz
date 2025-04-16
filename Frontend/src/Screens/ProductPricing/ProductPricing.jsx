@@ -93,13 +93,13 @@ const ProductPricing = () => {
 
 
 
-    const UpdateItem = async (id,storeid) => {
-        navigate('/addProductPricing', { state: { ID: id,STOREID:storeid } });//Change this 
+    const UpdateItem = async (id, storeid) => {
+        navigate('/addProductPricing', { state: { ID: id, STOREID: storeid } });//Change this 
     };
-    const removeItem = async (id,storeid) => {
+    const removeItem = async (id, storeid) => {
         try {
             setButtonDisabled(true);
-            const response = await post('/Itemattributes/delete', { "productid": id,"storeid":storeid });//Change this 
+            const response = await post('/Itemattributes/delete', { "productid": id, "storeid": storeid });//Change this 
             console.log("remove response: " + response);
             if (response.status === 200) {
                 alert(response.data.Data);
@@ -125,10 +125,10 @@ const ProductPricing = () => {
                     <div className="cls_dash_main">
                         <div className="cls_store_container">
                             <div className="cls_store_left">
-                                <label htmlFor="" className="cls_store_label">Manage Product Prices</label>
+                                <label htmlFor="" className="cls_store_label">Item Attributes Management</label>
                             </div>
                             <div className="cls_store_right">
-                                <button className="cls_store_btn" onClick={() => { handleItemClick() }}>Add Product Price</button>
+                                <button className="cls_store_btn" onClick={() => { handleItemClick() }}>Add New Item Attribute</button>
                                 <button className="cls_store_btn" onClick={() => { handleResetClick() }}>Reset All Filters</button>
                             </div>
                         </div>
@@ -153,13 +153,11 @@ const ProductPricing = () => {
                                 <table>
                                     <thead className='thead'>
                                         <tr>
-                                            <th style={{ width: "10%", color: "#FFF" }}>Image</th>
-                                            <th style={{ width: "25%", color: "#FFF" }}>Product Name</th>
-                                            <th style={{ width: "15%", color: "#FFF" }}>Price with Tax</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>Start Date</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>End Date</th>
+                                            <th style={{ width: "25%", color: "#FFF" }}>Name</th>
+                                            <th style={{ width: "15%", color: "#FFF" }}>Type</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>No of SubAttributes</th>
                                             <th style={{ width: "10%", color: "#FFF" }}>Store</th>
-                                            <th style={{ width: "10%", color: "#FFF" }}>Price</th>
+                                            <th style={{ width: "10%", color: "#FFF" }}>Created Date</th>
                                             <th style={{ width: "10%", color: "#FFF" }}>Actions</th>
                                         </tr>
                                     </thead>
@@ -167,22 +165,23 @@ const ProductPricing = () => {
                                         {currentRecords.map((product) => (
                                             product ? (
                                                 <tr key={product.PRODUCTID}>
-                                                    <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributeid}</td>
-                                                    {/* <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td> */}
-                                                            <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STARTDATE}</td>
-                                                            <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.ENDDATE}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.type}</td>
+                                                    <td><button className='cls_store_btn'>New</button></td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.storeid}</td>
+                                                    {/* <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td> */}
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>
+                                                        {new Date().toISOString().split("T")[0]}
+                                                    </td>
+
                                                     <td style={{ color: "#a38b8b" }}>
                                                         <div className="row">
                                                             <div className="col">
-                                                                <BiEdit size={32} onClick={() => UpdateItem(product.attributeid,product.storeid)} color="green"/>
+                                                                <BiEdit size={32} onClick={() => UpdateItem(product.attributeid, product.storeid)} color="green" />
                                                             </div>
                                                             <div className="col">
-                                                                <BiTrash size={32} onClick={() => removeItem(product.attributeid,product.storeid)} color="red"/>
+                                                                <BiTrash size={32} onClick={() => removeItem(product.attributeid, product.storeid)} color="red" />
                                                             </div>
                                                         </div>
                                                     </td>
