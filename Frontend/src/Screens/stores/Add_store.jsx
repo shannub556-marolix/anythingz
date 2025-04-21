@@ -207,7 +207,79 @@ export default function Add_store() {
                 {loading ? (
                     <Spinner title="Loading..," />
                 ) : (
+
+                    <>
                     <div className="cls_form_outline">
+
+                    {!button && (
+                                                  <div className="cls_menu_left">
+                                                  <label htmlFor="" className="cls_menu_left_label">Editing  London waffle co</label>
+                                                  <div className="cls_menu_container">
+                                                      <a href="#" className="cls_menu_container_cont" >
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >General</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Meta Data</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Operation Area & Zone</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Delivery</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Extras</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Actions</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Payment Gateways</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Comissions</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Payout Details</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Scheduling</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Sort Menus and items</label>
+                          
+                                                      </a>
+                                                      <a href="#" className="cls_menu_container_cont">
+                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
+                                                          <label htmlFor="" >Rating & Reviews</label>
+                          
+                                                      </a>
+                          
+                                                  </div>
+                                                  </div>  
+                        )}
+
                         <div className="cls_form_out_container">
                             <label htmlFor="" className="cls_form_out_label">{button ? "Add" : "Update"} Store</label>
                             <Form onSubmit={submitHandler}>
@@ -474,7 +546,7 @@ export default function Add_store() {
                             </Form>
                         </div>
                     </div>
-
+                    </>
                 )}
             </div>
         </>
