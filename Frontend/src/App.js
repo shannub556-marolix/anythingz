@@ -82,12 +82,6 @@ export default function App() {
             <Route path="/storepayouts" element={<Storepayouts/>} />
             <Route path="/deliverycollections" element={<Deliverycollections/>} />
             <Route path="/deliverycollectionlogs" element={<Deliverycollectionlogs/>} />
-
-
-
-            
-            
-            
          </Route>
   </Routes>
   );

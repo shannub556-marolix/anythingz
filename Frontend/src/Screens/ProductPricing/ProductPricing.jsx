@@ -44,7 +44,7 @@ const ProductPricing = () => {
         async function fetchDataFromAPI() {
             try {
                 setLoading(true);
-                const response = await get('/attribute');//Change this 
+                const response = await get('/attribute2');//Change this 
                 setProductsData(response.data.Data);  //Change this 
                 //console.log('response.data.Data'+response.data.Data);
             } catch (error) {
@@ -168,7 +168,7 @@ const ProductPricing = () => {
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.attributename}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.type}</td>
                                                     <td><button className='cls_store_btn'>New</button></td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.storeid}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STORENAME}</td>
                                                     {/* <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.STARTDATE)}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{Utils.getDate(product.ENDDATE)}</td> */}
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>

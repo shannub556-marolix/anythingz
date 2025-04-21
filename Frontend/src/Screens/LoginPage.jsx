@@ -33,8 +33,8 @@ const LoginPage = ({ history }) => {
     console.log("loading" + loading);
   }
   useEffect(() => {
-    if (accessToken) {
-      navigate('./home');
+    if (accessToken && accessToken !== '') {
+      navigate('/home');
     }
   }, [accessToken, navigate])
   // useEffect(() => {

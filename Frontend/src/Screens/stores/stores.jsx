@@ -45,6 +45,7 @@ const Vstores = () => {
                 setLoading(true);
                 const response = await get('/stores');
                 setStoresData(response.data.Data);
+                console.log(response.data.Data);
             } catch (error) {
                 alert('Error fetching Stores:', error);
             }
@@ -173,7 +174,8 @@ const Vstores = () => {
                                         {currentRecords.map((store) => (
                                             store ? (
                                                 <tr key={store.STOREID}>
-                                                    <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td>
+                                                    {/* <td><img src="/images/waffle_img.jpg" alt="" width={"73px"} /></td> */}
+                                                    <td><img src={store.IMAGE_URL} alt="" className='cls_table_img' /></td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{store.STORENAME}</td>
                                                     <td>
                                                         <label htmlFor="" className="cls_table_label">{store.FULL_ADDRESS}</label>

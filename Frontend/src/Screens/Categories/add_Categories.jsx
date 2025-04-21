@@ -6,6 +6,7 @@ import { useLocation } from 'react-router-dom';
 import Spinner from '../../Components/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { Category_Model } from '../../Models/CategoryModel';
+import { postImage } from "../../Components/api";
 
 
 export default function AddCategory() {
@@ -21,6 +22,8 @@ export default function AddCategory() {
     const [selectedStore, setSelectedStore] = useState('');
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [storesMap, setStoresMap] = useState(new Map());
+    const [selectedFile, setselectedFile] = useState({});
+    const [imageUrl, setImageUrl] = useState(formValues.IMAGE_URL || null);
     const getDetailsbyId = async (id) => {
         try {
             setLoading(true);
@@ -43,6 +46,40 @@ export default function AddCategory() {
             alert('Error while fetching Category Details :', error.message);
         }
         finally {
+            setLoading(false);
+        }
+    };
+    const handleFileSelect = (e) => {
+        setselectedFile(e.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            alert('Please select an image first');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            const response = await postImage('/uploadImage', formData, true);
+
+            if (response.data && response.data.image_path) {
+                setImageUrl(response.data.image_path);
+                setFormValues(prev => ({
+                    ...prev,
+                    CATEGORY_IMAGE_URL: response.data.image_path
+                }
+                ));
+                alert('Image uploaded successfully!');
+            } else {
+                alert('Failed to upload image.');
+            }
+        } catch (error) {
+            alert('Error uploading image: ' + error.message);
+        } finally {
             setLoading(false);
         }
     };
@@ -170,12 +207,6 @@ export default function AddCategory() {
                                         </div>
                                     </div>
                                     <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Image URL : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='CATEGORY_IMAGE_URL' className='cls_form_div_input' value={formValues.CATEGORY_IMAGE_URL} onChange={changeHandler} placeholder="Enter Category Image URL " />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
                                         <label className="cls_form_div_label cls_form_div_left">Store  :</label>
                                         <div className="cls_form_div_right">
                                             <Form.Control
@@ -194,15 +225,61 @@ export default function AddCategory() {
                                             </Form.Control>
                                         </div>
                                     </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Image : </label>
+                                        <div className="cls_form_div_right">
+                                            <div className="cls_flex cls_flex_gap_6px">
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleFileSelect}
+                                                    accept="image/*"
+                                                />
+                                                <button
+                                                    type="button" // Important: prevent form submission
+                                                    className="cls_btn_light"
+                                                    onClick={() => document.getElementById('fileInput').click()}
+                                                >
+                                                    Select Image
+                                                </button>
+                                                <button
+                                                    type="button" // Important: prevent form submission
+                                                    className="cls_btn_light"
+                                                    onClick={handleUpload}
+                                                    disabled={!selectedFile}
+                                                >
+                                                    Upload Image
+                                                </button>
+                                            </div>
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt="Uploaded"
+                                                    style={{
+                                                        width: 100,
+                                                        height: 100,
+                                                        marginTop: '10px',
+                                                        objectFit: 'cover'
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    {/* <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Image URL : </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='CATEGORY_IMAGE_URL' className='cls_form_div_input' value={formValues.CATEGORY_IMAGE_URL} onChange={changeHandler} placeholder="Enter Category Image URL " />
+                                        </div>
+                                    </div> */}
+                                    
                                 </div>
 
 
-                                <div className="cls_form_btn">
-
+                                <div className="cls_form_btn1">
                                     <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
                                         {button ? ("Save") : ("Update")}
                                     </button>
-
                                 </div>
 
                             </Form>

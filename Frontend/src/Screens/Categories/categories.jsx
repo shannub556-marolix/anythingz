@@ -154,9 +154,9 @@ const Categories = () => {
                                     <thead className='thead'>
                                         <tr>
                                             <th style={{ width: "10%" ,color:"#FFF" }}>Category Id</th>
+                                            <th style={{ width: "15%",color:"#FFF" }}>Image</th>
                                             <th style={{ width: "20%",color:"#FFF" }}>Category Name</th>
                                             <th style={{ width: "30%",color:"#FFF" }}>Category Description</th>
-                                            <th style={{ width: "15%",color:"#FFF" }}>Image URL</th>
                                             <th style={{ width: "15%",color:"#FFF" }}>Store</th>
                                             <th style={{ width: "10%",color:"#FFF" }}>Action</th>
                                         </tr>
@@ -166,14 +166,16 @@ const Categories = () => {
                                             category ? (
                                                 <tr key={category.CATEGORYID}>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{category.CATEGORYID}</td>
+                                                    {/* <td>
+                                                        <label htmlFor="" className="cls_table_label">{category.CATEGORY_IMAGE_URL}</label>
+                                                    </td> */}
+                                                    <td><img src={category.CATEGORY_IMAGE_URL} alt="" className='cls_table_img' /></td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{category.CATEGORYNAME}</td>
                                                     <td>
                                                         <label htmlFor="" className="cls_table_label">{category.CATEGORY_DESCRIPTION}</label>
                                                     </td>
-                                                    <td>
-                                                        <label htmlFor="" className="cls_table_label">{category.CATEGORY_IMAGE_URL}</label>
-                                                    </td>
-                                                    <td style={{ color: "orangered", fontSize: "14px" }}>{category.STOREID}</td>
+                                                    
+                                                    <td style={{ color: "orangered", fontSize: "14px" }}>{category.STORENAME}</td>
                                                     <td style={{ color: "#a38b8b" }}>
                                                         <div className="row">
                                                             <div className="col">

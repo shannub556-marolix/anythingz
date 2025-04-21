@@ -1,11 +1,12 @@
 import { USER_LOGIN_FAILED,USER_LOGIN_SUCCESS,USER_LOGIN_LOADING,USER_LOGOUT,USER_TOKEN_EXPIRED } from "../Types/userTypes"
-
 const initialState = {
     loading:false,
     data:[],
     error:'',
-    accessToken:false,
-    accessTokenId:'',
+    // accessToken:false,
+    // accessTokenId:'',
+    accessToken: !!localStorage.getItem("accessToken"),
+    accessTokenId: localStorage.getItem("accessToken") || '',
     //tokenExpiration:'',
 }
 

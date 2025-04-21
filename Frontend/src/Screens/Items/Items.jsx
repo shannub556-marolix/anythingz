@@ -169,7 +169,7 @@ const Items = () => {
                                                 <tr key={product.PRODUCTID}>
                                                     <td><img src={product.IMAGE_URL} alt="" className='cls_table_img' /></td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRODUCTNAME}</td>
-                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STOREID}</td>
+                                                    <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.STORENAME}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.CATEGORY}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}>{product.PRICE}</td>
                                                     <td style={{ fontSize: "14px", fontWeight: "650" }}><button className='cls_store_btn'>New</button></td>

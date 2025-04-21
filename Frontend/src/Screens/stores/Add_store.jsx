@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { store_Model } from '../../Models/StoreModel';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import '../../css/Home.css';
+import { postImage } from "../../Components/api";
 
 
 export default function Add_store() {
@@ -23,6 +24,10 @@ export default function Add_store() {
 
     const [isButtonDisabled, setButtonDisabled] = useState(false);
     const [zones, setZones] = useState([]);
+    const [storecategories, setStorecategories] = useState([]);
+    const [selectedFile, setselectedFile] = useState({});
+    const [imageUrl, setImageUrl] = useState(formValues.IMAGE_URL || null);
+
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -39,6 +44,47 @@ export default function Add_store() {
             );
         }
     }, []);
+
+    const handleFileSelect = async (e) => {
+        setselectedFile(e.target.files[0]);
+        if (selectedFile) {
+            await handleUpload();
+        }
+    };
+    const chooseFromGallery = () => {
+        alert('we are working on these features..,');
+        return;
+    }
+    const handleUpload = async () => {
+        if (!selectedFile) {
+            alert('Please select an image first');
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+
+            const response = await postImage('/uploadImage', formData, true);
+
+            if (response.data && response.data.image_path) {
+                setImageUrl(response.data.image_path);
+                setFormValues(prev => ({
+                    ...prev,
+                    IMAGE_URL: response.data.image_path,
+                }
+                ));
+                alert('Image uploaded successfully!');
+            } else {
+                alert('Failed to upload image.');
+            }
+        } catch (error) {
+            alert('Error uploading image: ' + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
     const getStoreDetailsbyId = async (id) => {
         try {
             setLoading(true);
@@ -70,6 +116,7 @@ export default function Add_store() {
             if (state.STOREID !== '' && state.STOREID !== null) {
                 getStoreDetailsbyId(state.STOREID);
             };
+            getStoreCategories();
         }
     }, [state]);
 
@@ -98,6 +145,21 @@ export default function Add_store() {
             }
         } catch (error) {
             alert('Error while fetching Zones:', error.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const getStoreCategories = async () => {
+        try {
+            setLoading(true);
+            const response = await get('/storecategories');
+            if (response.data.status === "success") {
+                setStorecategories(response.data.Data);
+            } else {
+                alert('Failed to Fetch Storecategories \n' + response.data);
+            }
+        } catch (error) {
+            alert('Error while fetching Storecategories:', error.message);
         } finally {
             setLoading(false);
         }
@@ -146,7 +208,7 @@ export default function Add_store() {
                     <Spinner title="Loading..," />
                 ) : (
                     <div className="cls_form_outline">
-                        <div className="cls_form_out_container ">
+                        <div className="cls_form_out_container">
                             <label htmlFor="" className="cls_form_out_label">{button ? "Add" : "Update"} Store</label>
                             <Form onSubmit={submitHandler}>
                                 <div class="cls_form_container">
@@ -163,6 +225,48 @@ export default function Add_store() {
                                         </div>
                                     </div>
                                     <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Image : </label>
+                                        <div className="cls_form_div_right">
+                                            <div className="cls_flex cls_flex_gap_6px">
+                                                <button
+                                                    type="button" // Important: prevent form submission
+                                                    className="cls_btn_light"
+                                                    onClick={chooseFromGallery}
+                                                    disabled={!selectedFile}
+                                                >
+                                                    Choose From Gallery
+                                                </button>
+                                                <input
+                                                    type="file"
+                                                    id="fileInput"
+                                                    style={{ display: 'none' }}
+                                                    onChange={handleFileSelect}
+                                                    accept="image/*"
+                                                />
+                                                <button
+                                                    type="button" // Important: prevent form submission
+                                                    className="cls_btn_light"
+                                                    onClick={() => document.getElementById('fileInput').click()}
+                                                >
+                                                    Upload Image
+                                                </button>
+
+                                            </div>
+                                            {imageUrl && (
+                                                <img
+                                                    src={imageUrl}
+                                                    alt="Uploaded"
+                                                    style={{
+                                                        width: 100,
+                                                        height: 100,
+                                                        marginTop: '10px',
+                                                        objectFit: 'cover'
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
                                         <label className="cls_form_div_label cls_form_div_left">Default Rating : </label>
                                         <div className="cls_form_div_right">
                                             <Form.Control type="text" name='DEFAULT_RATING' className='cls_form_div_input' value={formValues.DEFAULT_RATING} onChange={changeHandler} placeholder="Enter Default Rating" />
@@ -174,7 +278,32 @@ export default function Add_store() {
                                             <Form.Control type="text" name='APPROX_DELIVERYTIME' className='cls_form_div_input' value={formValues.APPROX_DELIVERYTIME} onChange={changeHandler} placeholder="Enter Approx Delivery Time" />
                                         </div>
                                     </div>
-
+                                    <div className="cls_break_line"></div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Store Category  :</label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control
+                                                as="select"
+                                                name="STORECATEGORYID"
+                                                className="cls_form_div_input"
+                                                value={formValues.STORECATEGORYID}
+                                                onChange={changeHandler}
+                                            >
+                                                <option value="">Select Store Category</option>
+                                                {storecategories.map((scat) => (
+                                                    <option key={scat.STORECATEGORYID} value={scat.STORECATEGORYID}>
+                                                        {scat.STORECATEGORYNAME}
+                                                    </option>
+                                                ))}
+                                            </Form.Control>
+                                        </div>
+                                    </div>
+                                    <div className="cls_form_div">
+                                        <label className="cls_form_div_label cls_form_div_left">Store URL: </label>
+                                        <div className="cls_form_div_right">
+                                            <Form.Control type="text" name='STORE_URL' className='cls_form_div_input' value={formValues.STORE_URL} onChange={changeHandler} placeholder="Enter Store URL" />
+                                        </div>
+                                    </div>
                                     <div className="cls_break_line"></div>
 
                                     <div className="cls_form_div">
@@ -220,7 +349,7 @@ export default function Add_store() {
                                             </div>
 
                                         </div>
-                                            <div className="cls_break_line"></div>
+                                        <div className="cls_break_line"></div>
 
                                     </div>
 
@@ -335,13 +464,13 @@ export default function Add_store() {
                                         </div>
                                     </div>
                                     <div className="cls_break_line"></div>
-                                    <div className="cls_form_btn">
-                                <button type="submit" className="cls_btn_blue " disabled={isButtonDisabled} >
-                                    {button ? ("Save") : ("Update")}
-                                </button>
+                                    <div className="cls_form_btn1">
+                                        <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
+                                            {button ? ("Save") : ("Update")}
+                                        </button>
+                                    </div>
                                 </div>
-                                </div>
-                                
+
                             </Form>
                         </div>
                     </div>
