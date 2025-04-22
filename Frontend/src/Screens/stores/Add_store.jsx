@@ -9,6 +9,20 @@ import { store_Model } from '../../Models/StoreModel';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import '../../css/Home.css';
 import { postImage } from "../../Components/api";
+import Add_store_cont from "./Add_store_cont";
+import General_Tab from "./General_Tab";
+import Metadata_Tab from "./Metadata_Tab";
+import Operations_Tab from "./Operations_Tab";
+import Extras_Tab from "./Extras_Tab";
+import Delivery_Tab from "./Delivery_Tab";
+import Actions_Tab from "./Actions_Tab";
+import Payment_Gateways_Tab from "./Payment_Gateways_Tab";
+import Commissions_Tab from "./Commissions_Tab";
+import Payout_Details_Tab from "./Payout_Details_Tab";
+import Scheduling_Tab from "./Scheduling_Tab";
+import Sort_Menus_Items_Tab from "./Sort_Menus_Items_Tab";
+import Rating_Reviews_Tab from "./Rating_Reviews_Tab";
+
 
 
 export default function Add_store() {
@@ -27,6 +41,7 @@ export default function Add_store() {
     const [storecategories, setStorecategories] = useState([]);
     const [selectedFile, setselectedFile] = useState({});
     const [imageUrl, setImageUrl] = useState(formValues.IMAGE_URL || null);
+    const [activeTab, setActiveTab] = useState('general');
 
 
     useEffect(() => {
@@ -209,343 +224,87 @@ export default function Add_store() {
                 ) : (
 
                     <>
-                    <div className="cls_form_outline">
 
-                    {!button && (
-                                                  <div className="cls_menu_left">
-                                                  <label htmlFor="" className="cls_menu_left_label">Editing  London waffle co</label>
-                                                  <div className="cls_menu_container">
-                                                      <a href="#" className="cls_menu_container_cont" >
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >General</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Meta Data</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Operation Area & Zone</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Delivery</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Extras</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Actions</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Payment Gateways</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Comissions</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Payout Details</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Scheduling</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Sort Menus and items</label>
-                          
-                                                      </a>
-                                                      <a href="#" className="cls_menu_container_cont">
-                                                          <img src="https://prudvi.anythngz.com/apis/public/images/67fbbe706b734.png" alt="" width={"16px"}/>
-                                                          <label htmlFor="" >Rating & Reviews</label>
-                          
-                                                      </a>
-                          
-                                                  </div>
-                                                  </div>  
-                        )}
 
-                        <div className="cls_form_out_container">
-                            <label htmlFor="" className="cls_form_out_label">{button ? "Add" : "Update"} Store</label>
-                            <Form onSubmit={submitHandler}>
-                                <div class="cls_form_container">
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store Name : <span className="cls_danger_label">*</span> </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='STORENAME' className='cls_form_div_input' value={formValues.STORENAME} onChange={changeHandler} placeholder="Enter Store name" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Description : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='DESCRIPTION' className='cls_form_div_input' value={formValues.DESCRIPTION} onChange={changeHandler} placeholder="Enter Description" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Image : </label>
-                                        <div className="cls_form_div_right">
-                                            <div className="cls_flex cls_flex_gap_6px">
-                                                <button
-                                                    type="button" // Important: prevent form submission
-                                                    className="cls_btn_light"
-                                                    onClick={chooseFromGallery}
-                                                    disabled={!selectedFile}
-                                                >
-                                                    Choose From Gallery
-                                                </button>
-                                                <input
-                                                    type="file"
-                                                    id="fileInput"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileSelect}
-                                                    accept="image/*"
-                                                />
-                                                <button
-                                                    type="button" // Important: prevent form submission
-                                                    className="cls_btn_light"
-                                                    onClick={() => document.getElementById('fileInput').click()}
-                                                >
-                                                    Upload Image
-                                                </button>
+{!button && (
+  <div className="cls_form_outline">
+    {/* Left Menu */}
+    <div className="cls_menu_left">
+    <label htmlFor="" className="cls_menu_left_label">Editing  London waffle co</label>
+      <div className="cls_menu_container">
+        {[
+  { id: 'general', label: 'General' },
+  { id: 'metadata', label: 'Meta Data' },
+  { id: 'operations', label: 'Operation Area & Zone' },
+  { id: 'delivery', label: 'Delivery' },
+  { id: 'extras', label: 'Extras' },
+  { id: 'actions', label: 'Actions' },
+  { id: 'payment_gateways', label: 'Payment Gateways' },
+  { id: 'commissions', label: 'Commissions' },
+  { id: 'payout_details', label: 'Payout Details' },
+  { id: 'scheduling', label: 'Scheduling' },
+  { id: 'sort_menus_items', label: 'Sort Menus and items' },
+  { id: 'rating_reviews', label: 'Rating & Reviews' }
+].map((tab) => (
+          <a
+            key={tab.id}
+            href="#"
+            className={`cls_menu_container_cont ${activeTab === tab.id ? 'active_tab' : ''}`}
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveTab(tab.id);
+            }}
+          >
+            <img src="icon.png" alt="" width={"16px"} />
+            <label>{tab.label}</label>
+          </a>
+        ))}
+      </div>
+    </div>
 
-                                            </div>
-                                            {imageUrl && (
-                                                <img
-                                                    src={imageUrl}
-                                                    alt="Uploaded"
-                                                    style={{
-                                                        width: 100,
-                                                        height: 100,
-                                                        marginTop: '10px',
-                                                        objectFit: 'cover'
-                                                    }}
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Default Rating : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='DEFAULT_RATING' className='cls_form_div_input' value={formValues.DEFAULT_RATING} onChange={changeHandler} placeholder="Enter Default Rating" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Approx Delivery Time : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='APPROX_DELIVERYTIME' className='cls_form_div_input' value={formValues.APPROX_DELIVERYTIME} onChange={changeHandler} placeholder="Enter Approx Delivery Time" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_break_line"></div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store Category  :</label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control
-                                                as="select"
-                                                name="STORECATEGORYID"
-                                                className="cls_form_div_input"
-                                                value={formValues.STORECATEGORYID}
-                                                onChange={changeHandler}
-                                            >
-                                                <option value="">Select Store Category</option>
-                                                {storecategories.map((scat) => (
-                                                    <option key={scat.STORECATEGORYID} value={scat.STORECATEGORYID}>
-                                                        {scat.STORECATEGORYNAME}
-                                                    </option>
-                                                ))}
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store URL: </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='STORE_URL' className='cls_form_div_input' value={formValues.STORE_URL} onChange={changeHandler} placeholder="Enter Store URL" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_break_line"></div>
+    {/* Content Area */}
+    <div className="cls_form_out_container">
+    {activeTab === 'general' && <General_Tab />}
+{activeTab === 'metadata' && <Metadata_Tab />}
+{activeTab === 'operations' && <Operations_Tab />}
+{activeTab === 'delivery' && <Delivery_Tab />}
+{activeTab === 'extras' && <Extras_Tab />}
+{activeTab === 'actions' && <Actions_Tab />}
+{activeTab === 'payment_gateways' && <Payment_Gateways_Tab />}
+{activeTab === 'commissions' && <Commissions_Tab />}
+{activeTab === 'payout_details' && <Payout_Details_Tab />}
+{activeTab === 'scheduling' && <Scheduling_Tab />}
+{activeTab === 'sort_menus_items' && <Sort_Menus_Items_Tab />}
+{activeTab === 'rating_reviews' && <Rating_Reviews_Tab />}
 
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Full Address : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='FULL_ADDRESS' className='cls_form_div_input' value={formValues.FULL_ADDRESS} onChange={changeHandler} placeholder="Enter Full Address" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Pincode : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='PINCODE' className='cls_form_div_input' value={formValues.PINCODE} onChange={changeHandler} placeholder="Enter Pincode" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Landmark : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='LANDMARK' className='cls_form_div_input' value={formValues.LANDMARK} onChange={changeHandler} placeholder="Enter Landmark" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_map_outline">
-                                        <label className="cls_form_div_label ">Locate on Map : </label>
-                                        <div className="cls_form_map_div">
-                                            <LoadScript googleMapsApiKey="AIzaSyAPIyfsaN6qqfiiyvZkY-BtKL1fzgCFVpg">
-                                                <GoogleMap mapContainerStyle={containerStyle} center={maplocation} zoom={15}>
-                                                    <Marker position={maplocation} />
-                                                </GoogleMap>
-                                            </LoadScript>
-                                        </div>
+    </div>
+  </div>
+)}
 
-                                        <div className="cls_form_div1">
-                                            <div className="cls_form_map_div2">
-                                                <label className="cls_form_div_label ">Latitude of the Store  : </label>
-                                                <div className="">
-                                                    <Form.Control type="text" name='STORE_LATITUDE' className='cls_form_div_input' value={formValues.STORE_LATITUDE} onChange={changeHandler} placeholder="Enter Latitude of the Store " />
-                                                </div>
-                                            </div>
-                                            <div className="cls_form_map_div2">
-                                                <label className="cls_form_div_label ">Longitude of the Store  : </label>
-                                                <div className="">
-                                                    <Form.Control type="text" name='STORE_LONGITUDE' className='cls_form_div_input' value={formValues.STORE_LONGITUDE} onChange={changeHandler} placeholder="Enter Longitude of the Store " />
-                                                </div>
-                                            </div>
+{/*  Add_Item COntent */}
+{button && (
+  <div className="cls_form_outline">
+      <Add_store_cont 
+     formValues={formValues}
+     handleChange={changeHandler}  
+     handleSubmit={submitHandler}
+     button={button}
+     isButtonDisabled={isButtonDisabled}
+     zones={zones}
+     storecategories={storecategories}
+     imageUrl={imageUrl}
+     handleFileSelect={handleFileSelect}
+     chooseFromGallery={chooseFromGallery}
+     maplocation={maplocation}
+     containerStyle={containerStyle}
+     selectedFile={selectedFile} 
+ />
+  </div>
+)}
 
-                                        </div>
-                                        <div className="cls_break_line"></div>
 
-                                    </div>
+                       
 
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Certificate/License Code  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='CERTIFICATE' className='cls_form_div_input' value={formValues.CERTIFICATE} onChange={changeHandler} placeholder="Enter Certificate/License Code " />
-                                        </div>
-                                    </div>
-
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store Charge  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='STORE_CHARGE' className='cls_form_div_input' value={formValues.STORE_CHARGE} onChange={changeHandler} placeholder="Enter Store Charge (Packing/Extra) " />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store Charge Tax  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='STORE_CHARGE_TAX' className='cls_form_div_input' value={formValues.STORE_CHARGE_TAX} onChange={changeHandler} placeholder="Enter Store Charge Tax" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Delivery Charge Type  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control
-                                                as="select"
-                                                name='DELIVERY_CHARGE_TYPE'
-                                                className='cls_form_div_input'
-                                                value={formValues.DELIVERY_CHARGE_TYPE}
-                                                onChange={changeHandler}
-                                            >
-                                                <option value="">Select Delivery Charge Type</option>
-                                                <option value="Type 1">Type 1</option>
-                                                <option value="Type 2">Type 2</option>
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Delivery Type  :</label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control
-                                                as="select"
-                                                name='DELIVERY_TYPE'
-                                                className='cls_form_div_input'
-                                                value={formValues.DELIVERY_TYPE}
-                                                onChange={changeHandler}
-                                            >
-                                                <option value="">Select Delivery Type</option>
-                                                <option value="Type 1">Type 1</option>
-                                                <option value="Type 2">Type 2</option>
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Delivery Charge  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='DELIVERY_CHARGE' className='cls_form_div_input' value={formValues.DELIVERY_CHARGE} onChange={changeHandler} placeholder="Enter Delivery Charge" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Minimum Order Price  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='MIN_ORDER_PRICE' className='cls_form_div_input' value={formValues.MIN_ORDER_PRICE} onChange={changeHandler} placeholder="Enter Minimum Order Price" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Store Tax Percentage  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='STORE_TAX_PERCENTAGE' className='cls_form_div_input' value={formValues.STORE_TAX_PERCENTAGE} onChange={changeHandler} placeholder="Enter Store Tax Percentage" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Commission Type :</label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control
-                                                as="select"
-                                                name='COMMISSION_TYPE'
-                                                className='cls_form_div_input'
-                                                value={formValues.COMMISSION_TYPE}
-                                                onChange={changeHandler}
-                                            >
-                                                <option value="">Select Commission Type</option>
-                                                <option value="Type 1">Type 1</option>
-                                                <option value="Type 2">Type 2</option>
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Commission Rate  : </label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control type="text" name='COMMISSION_RATE' className='cls_form_div_input' value={formValues.COMMISSION_RATE} onChange={changeHandler} placeholder="Enter Commission Rate" />
-                                        </div>
-                                    </div>
-                                    <div className="cls_form_div">
-                                        <label className="cls_form_div_label cls_form_div_left">Zone  :</label>
-                                        <div className="cls_form_div_right">
-                                            <Form.Control
-                                                as="select"
-                                                name="ZONE"
-                                                className="cls_form_div_input"
-                                                value={zones.find((zone) => zone.zoneid === formValues.ZONE)?.zonename || ""}
-                                                onChange={changeHandler}
-                                            >
-                                                <option value="">Select ZONE</option>
-                                                {zones.map((zone) => (
-                                                    <option key={zone.zoneid} value={zone.zonename}>
-                                                        {zone.zonename}
-                                                    </option>
-                                                ))}
-                                            </Form.Control>
-                                        </div>
-                                    </div>
-                                    <div className="cls_break_line"></div>
-                                    <div className="cls_form_btn1">
-                                        <button type="submit" className="cls_btn_blue" disabled={isButtonDisabled} >
-                                            {button ? ("Save") : ("Update")}
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </Form>
-                        </div>
-                    </div>
                     </>
                 )}
             </div>
