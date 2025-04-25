@@ -395,11 +395,23 @@ label{
   display: flex;
   justify-content: center;
   column-gap: 2%;
+  /* align-items: center;
+  flex-direction: column; */
 }
 .cls_width26{
   width: 30% !important;
 }
-
+.cls_store_out_container{
+  margin: 125px 0px 22px 0px;
+  background-color: #FFF;
+  padding: 20px 16px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px 0 rgb(0 0 0 / 10%);
+  width: 100%;
+  display: flex
+;
+  flex-direction: column;
+}
 .cls_add_items_right{
   display: flex;
   flex-direction: column;
@@ -410,7 +422,7 @@ label{
 .cls_menu_left{
   display: flex;
   flex-direction: column;
-  width: 26%;
+  width: 22%;
   margin: 80px 0px 22px 0px;
   row-gap: 20px;
 }
@@ -449,6 +461,30 @@ label{
   flex-direction: column;
 }
 
+.cls_form_out_container_rep{
+  margin: 14px 0px 22px 0px;
+  background-color: #FFF;
+  padding: 20px 16px;
+  border-radius: 5px;
+  box-shadow:  0 1px 4px 0 rgb(0 0 0 / 10%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.cls_width60{
+  width: 67%;
+}
+.cls_form_div_rep{
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+.cls_form_div_rep_out{
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
 .cls_form_out_container1{
   background-color: #FFF;
   padding: 20px 16px;
@@ -477,6 +513,7 @@ label{
   display: flex;
   column-gap: 5%;
   align-items: center;
+  width: 100%;
 }
 .cls_form_div_left{
   width: 30%;
@@ -487,6 +524,10 @@ label{
 .cls_form_div_label{
   font-size: 16px;
   font-weight: 600;
+}
+.cls_form_div_label1{
+  font-size: 13px;
+  font-weight: 500;
 }
 .cls_danger_label{
   color: red;
@@ -850,4 +891,36 @@ input:checked + .slider:before {
 .cls_table_img{
   width: 45px;
   object-fit: cover;
+}
+.cls_timings_outline{
+  display: flex
+  ;
+      flex-direction: column;
+      row-gap: 20px;
+      
+}
+.cls_timings_div{
+  display: flex;
+  flex-direction: column;
+  row-gap:4px ;
+  width: 45%;
+}
+.cls_timings_container{
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+}
+.cls_timings_content{
+  display: flex;
+  column-gap: 16px;
+  align-items: flex-end;
+  width: 100%;
+}
+.cls_timings_header{
+  font-size: 17px;
+    font-weight: 700;
+    line-height: 12px;
 }

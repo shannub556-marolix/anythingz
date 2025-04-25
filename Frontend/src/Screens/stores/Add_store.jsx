@@ -263,7 +263,7 @@ export default function Add_store() {
     </div>
 
     {/* Content Area */}
-    <div className="cls_form_out_container">
+    <div className="cls_block cls_width60">
     {activeTab === 'general' && <General_Tab />}
 {activeTab === 'metadata' && <Metadata_Tab />}
 {activeTab === 'operations' && <Operations_Tab />}
