@@ -35,6 +35,7 @@ import DropNow from './Screens/Dropnow';
 import Storepayouts from './Screens/Storepayouts';
 import Deliverycollections from './Screens/Deliverycollections';
 import Deliverycollectionlogs from './Screens/deliverycollectionlogs';
+import Settings from './Screens/Settings/Settings';
 
 // import './App.css'
 
@@ -82,6 +83,7 @@ export default function App() {
             <Route path="/storepayouts" element={<Storepayouts/>} />
             <Route path="/deliverycollections" element={<Deliverycollections/>} />
             <Route path="/deliverycollectionlogs" element={<Deliverycollectionlogs/>} />
+            <Route path='/allsettings' element={<Settings/>} />
          </Route>
   </Routes>
   );
