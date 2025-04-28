@@ -977,3 +977,9 @@ input:checked + .slider:before {
 
 
 }
+.cls_table_td_green{
+  color: #02b875!important;
+}
+.cls_table_td_orange{
+  color: #f05150!important;
+}

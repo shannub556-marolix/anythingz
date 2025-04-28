@@ -36,6 +36,15 @@ import Storepayouts from './Screens/Storepayouts';
 import Deliverycollections from './Screens/Deliverycollections';
 import Deliverycollectionlogs from './Screens/deliverycollectionlogs';
 import Settings from './Screens/Settings/Settings';
+import Storeperformancereport from './Screens/Reports/Storeperformancereport';
+import Storebalancereport from './Screens/Reports/Storebalancereport';
+import Storewiseorderreport from './Screens/Reports/Storewiseorderreport';
+import Deliveryguyearningreport from './Screens/Reports/Deliveryguyearningreport';
+import Customerperformancereport from './Screens/Reports/Customerperformancereport';
+import Adminearningreport from './Screens/Reports/Adminearningreport';
+import Allinonereport from './Screens/Reports/Allinonereport';
+import Paymentmethodreport from './Screens/Reports/Paymentmethodreport';
+import Tax_report from './Screens/Reports/Tax_report';
 
 // import './App.css'
 
@@ -84,6 +93,20 @@ export default function App() {
             <Route path="/deliverycollections" element={<Deliverycollections/>} />
             <Route path="/deliverycollectionlogs" element={<Deliverycollectionlogs/>} />
             <Route path='/allsettings' element={<Settings/>} />
+            <Route path='/storeperformancereport' element={<Storeperformancereport/>} />
+            <Route path='/storebalancereport' element={<Storebalancereport/>} />
+            <Route path='/storewiseorderreport' element={<Storewiseorderreport/>} />
+            <Route path='/deliveryguyearningreport' element={<Deliveryguyearningreport/>} />
+            <Route path='/customerperformancereport' element={<Customerperformancereport/>} />
+            <Route path='/adminearningreport' element={<Adminearningreport/>} />
+            <Route path='/allinonereport' element={<Allinonereport/>} />
+            <Route path='/paymentmethodreport' element={<Paymentmethodreport/>} />
+            <Route path='/taxreport' element={<Tax_report/>} />
+
+
+
+
+
          </Route>
   </Routes>
   );

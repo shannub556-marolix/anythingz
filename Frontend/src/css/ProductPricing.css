@@ -101,10 +101,10 @@
   }
   .cls_store_table{
     display: block;
+   
   }
   .cls_store_table table{
     border-spacing: 0;
-    width: 100%;
     table-layout: fixed;
   }
   .cls_store_table th{
@@ -146,4 +146,59 @@
 }
 .cls_store_table tbody tr{
   border-bottom: 1px solid #ddd;
+}
+
+
+.cls_report_table td:last-child{
+  color: #a38b8b;
+}
+.cls_report_table{
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+.cls_report_table table{
+  border-spacing: 0;
+  width: 3400px;
+  table-layout: fixed;
+}
+.cls_report_table th{
+  border-left: 0px solid #C4C4C4;
+    border-right: 0px solid #C4C4C4;
+    border-bottom: 0px solid #C4C4C4 !important;
+    padding: 15px 6px !important;
+    position: sticky;
+    top: 0;
+    color: rgb(255, 255, 255) !important;
+    font-family: inherit !important;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600 !important;
+    z-index: 10;
+    text-align: left;
+}
+.cls_report_table td{
+  border-left: 0px solid #C4C4C4;
+    border-right: 0px solid #C4C4C4;
+    border-bottom: 0px solid #C4C4C4 !important;
+    padding: 12px 6px;
+    color: #4e535a !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-style: normal;
+    font-weight: 500 ;
+    text-align: left;
+}
+
+.cls_report_table td:last-child,.cls_report_table th:last-child{
+  padding-right: 22px;
+}
+.cls_report_table td:first-child,.cls_report_table th:first-child{
+  padding-left: 22px;
+}
+.cls_report_table tbody tr:nth-child(even) {
+  background: rgba(0,0,0,.02);
+}
+.cls_report_table tbody tr{
+border-bottom: 1px solid #ddd;
 }

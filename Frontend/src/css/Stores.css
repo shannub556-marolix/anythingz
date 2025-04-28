@@ -103,7 +103,6 @@
   }
   .cls_store_table table{
     border-spacing: 0;
-    width: 100%;
     table-layout: fixed;
   }
   .cls_store_table th{
