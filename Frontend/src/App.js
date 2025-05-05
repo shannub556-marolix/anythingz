@@ -45,6 +45,12 @@ import Adminearningreport from './Screens/Reports/Adminearningreport';
 import Allinonereport from './Screens/Reports/Allinonereport';
 import Paymentmethodreport from './Screens/Reports/Paymentmethodreport';
 import Tax_report from './Screens/Reports/Tax_report';
+import Promosliders from './Screens/Promotions/Promosliders';
+import Register from './Screens/Register';
+import ForgotPassword from './Screens/FogotPassword';
+import Storecategorysliders from './Screens/Promotions/Storecategorysliders';
+import Sendpushnotification from './Screens/Promotions/Sendpushnotification';
+import Editsliders from './Screens/Promotions/editsliders';
 
 // import './App.css'
 
@@ -58,6 +64,8 @@ export default function App() {
       {/* public routes */}
       <Route path="*" element={<NotFound />} />
       <Route path="/" element={<LoginPage/>} />
+      <Route path="/ForgotPassword" element={<ForgotPassword/>} />
+      <Route path="/Register" element={<Register/>} />
       <Route path="/ReportPreview" element={<ReportPreview/>} />
       {/* protected / Private routes */}
             <Route element={<PrivateRoutes />}>
@@ -102,7 +110,10 @@ export default function App() {
             <Route path='/allinonereport' element={<Allinonereport/>} />
             <Route path='/paymentmethodreport' element={<Paymentmethodreport/>} />
             <Route path='/taxreport' element={<Tax_report/>} />
-
+            <Route path='/promosliders' element={<Promosliders/>} />
+            <Route path='/storecategorysliders' element={<Storecategorysliders/>} />
+            <Route path='/sendpushnotification' element={<Sendpushnotification/>} />
+            <Route path='/editsliders' element={<Editsliders/>} />
 
 
 

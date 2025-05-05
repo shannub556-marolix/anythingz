@@ -7,7 +7,7 @@ import '../css/Loginpage.css';
 import Spinner from '../Components/Spinner';
 
 
-const LoginPage = ({ history }) => {
+const Register = ({ history }) => {
   const stateValus = useSelector(state => state.userLogin)
   const { loading, data, error, accessToken } = stateValus;
   const dispatch = useDispatch()
@@ -18,30 +18,7 @@ const LoginPage = ({ history }) => {
     password: ''
   })
   const { email, password } = formValues;
-  const changeHandler = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value })
-  }
 
-  const submitHandler = (e) => {
-    console.log("loading" + loading);
-    setButtonDisabled(true);
-    e.preventDefault();
-    dispatch(userAction(formValues))
-    setTimeout(() => {
-      setButtonDisabled(false);
-    }, 2000);
-    console.log("loading" + loading);
-  }
-  useEffect(() => {
-    if (accessToken && accessToken !== '') {
-      navigate('/home');
-    }
-  }, [accessToken, navigate])
-  // useEffect(() => {
-  //   if (accessToken) {
-  //     navigate('./home');
-  //   }
-  // }, [accessToken, navigate])
   return (
     <>
       <div>
@@ -70,49 +47,62 @@ const LoginPage = ({ history }) => {
                               alt="display"
                               hidden
                             /> */}
-                            <h1 className="h1 text-gray-900 mb-4">Welcome Back!</h1>
+                            <h1 className=" text-gray-900" style={{fontSize:"12px",marginTop:"12px"}}>Register for Store Owner</h1>
                           </div>
-                          <Form onSubmit={submitHandler}>
+                          <Form >
+                          <Form.Group controlId="inputname">
+                              <Form.Control
+                                type="text"
+                                name='Name'
+                                className='form-control-user'
+                               
+                                 
+                                placeholder="Full Name"
+                              />
+                            </Form.Group>
                             <Form.Group controlId="inputusername">
                               <Form.Control
                                 type="text"
                                 name='email'
                                 className='form-control-user'
                                 value={email}
-                                onChange={changeHandler}
+                                 
                                 placeholder="Enter EMail"
                               />
                             </Form.Group>
+                            
+                            <Form.Group controlId="inputmobile">
+                              <Form.Control
+                                type="number"
+                                name='Mobile'
+                                className='form-control-user'
+                                
+                                 
+                                placeholder="Phone Number"
+                              />
+                            </Form.Group>
+
                             <Form.Group controlId="inputpassword">
                               <Form.Control
                                 type="password"
                                 name='password'
                                 className='form-control-user'
                                 value={password}
-                                onChange={changeHandler}
+                                 
                                 placeholder="Enter Password"
                               />
                             </Form.Group>
-                            <div className="form-group">
-                              <div className="custom-control custom-checkbox small">
-                                <input type="checkbox" className="custom-control-input" id="customCheck" />
-                                <label className="custom-control-label" htmlFor="customCheck">Remember
-                                  Me</label>
-                              </div>
-                            </div>
+                            
                             <button type="submit" className="btn btn-primary btn-user btn-block" disabled={isButtonDisabled} >
-                              {loading ? ("Loading") : ("Sign In")}
+                              {loading ? ("Loading") : ("Register")}
                             </button>
                           </Form>
-                          <hr />
-                          <div className="text-center">
-                            <a className="small text-muted" href="/ForgotPassword">Forgot password?</a>
-                          </div>
+                        
                           <div className="text-center">
                             <p className="mb-3 text-center" style={{ color: "#393f81" }} />
-                            Don't have an account?{" "}
-                            <a href="/Register" style={{ color: "#393f81" }}>
-                              Register here
+                            Already have a account?{" "}
+                            <a href="/" style={{ color: "#393f81" }}>
+                              Login here
                             </a>
                           </div>
                           <hr />
@@ -174,7 +164,7 @@ const LoginPage = ({ history }) => {
           name='user'
           className='user'
           value={user}
-          onChange={changeHandler}
+           
           placeholder="Enter Username"
         />
       </Form.Group>
@@ -184,7 +174,7 @@ const LoginPage = ({ history }) => {
           name='pwd'
           className='pwd'
           value={pwd}
-          onChange={changeHandler}
+           
           placeholder="Enter Password"
         />
       </Form.Group>
@@ -225,4 +215,4 @@ const LoginPage = ({ history }) => {
   }
 }
 
-export default LoginPage;
+export default Register;

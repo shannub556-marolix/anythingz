@@ -104,7 +104,7 @@
 }
  .menu-bar ul a:hover {
     color: #DD1D50;
-    font-weight:700;
+    /* font-weight:700; */
 }
 
 .menu-bar ul li:hover .sub-menu-1 {

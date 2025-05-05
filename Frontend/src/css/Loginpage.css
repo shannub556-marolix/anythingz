@@ -26,7 +26,7 @@
   .form-control-user {
     font-size: 0.8rem;
     margin-top: 10px;
-    border-radius: 10rem;
+    border-radius: 4px;
     padding: 0.5rem 1rem;
   }
   .custom-control-input{
