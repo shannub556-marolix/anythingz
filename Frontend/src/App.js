@@ -51,6 +51,7 @@ import ForgotPassword from './Screens/FogotPassword';
 import Storecategorysliders from './Screens/Promotions/Storecategorysliders';
 import Sendpushnotification from './Screens/Promotions/Sendpushnotification';
 import Editsliders from './Screens/Promotions/editsliders';
+import HomePage from './MobileView/HomePage';
 
 // import './App.css'
 
@@ -67,6 +68,8 @@ export default function App() {
       <Route path="/ForgotPassword" element={<ForgotPassword/>} />
       <Route path="/Register" element={<Register/>} />
       <Route path="/ReportPreview" element={<ReportPreview/>} />
+      <Route path="/anythingz" element={<HomePage/>} />
+
       {/* protected / Private routes */}
             <Route element={<PrivateRoutes />}>
             <Route exact path="/home" element={<Home/>}/>
